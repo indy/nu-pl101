@@ -36,6 +36,8 @@ var endTime = function (time, expr) {
       return lDur > rDur ? lDur : rDur;
     } else if (exp.tag === 'rest') {
       return exp.dur;
+    } else if (exp.tag === 'repeat') {
+      return exp.count * duration(exp.section);
     } else {
       throw "endTime error. Unknown tag: " + exp.tag;
     }
@@ -59,6 +61,12 @@ function traverse(res, time, expr) {
     res.push({ tag: expr.tag,
                dur: expr.dur,
                start: time });
+  } else if(expr.tag === 'repeat') {
+    var t = time;
+    for(var i=0;i<expr.count;i+=1) {
+      res = traverse(res, t, expr.section);
+      t += endTime(0, expr.section);
+    }
   } else {
     throw "error. Unknown tag: " + expr.tag;
   }
@@ -102,4 +110,19 @@ var melody_mus_rest =
          left: { tag: 'note', pitch: 'c4', dur: 500 },
          right: { tag: 'note', pitch: 'd4', dur: 500 } } };
 
-console.log(compile(melody_mus_rest));
+var melody_mus_repeats = 
+  { tag: 'seq',
+    left: 
+    { tag: 'seq',
+      left: { tag: 'note', pitch: 'a4', dur: 250 },
+      right: { tag: 'repeat',
+               section: { tag: 'note', pitch: 'b4', dur: 250 },
+               count: 3 } },
+    right:
+    { tag: 'seq',
+      left: { tag: 'note', pitch: 'c4', dur: 500 },
+      right: { tag: 'note', pitch: 'd4', dur: 500 } } };
+
+console.log(compile(melody_mus_repeats));
+console.log(endTime(0, melody_mus_repeats.left));
+
