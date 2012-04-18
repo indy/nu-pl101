@@ -13,17 +13,6 @@ var midiNumbers = { "a0": 22, "b0": 23, "c1": 24, "d1": 26,
                     "g7": 103, "a7": 105, "b7": 107, "c8": 108
                   };
 
-var reverse = function(expr) {
-    if(expr.tag === 'note') {
-        return expr;
-    } else {
-        return {tag: 'seq',
-                left: reverse(expr.right),
-                right: reverse(expr.left)
-               };
-    }
-};
-
 var endTime = function (time, expr) {
   var duration = function(exp) {
     if(exp.tag === 'note') {
@@ -76,53 +65,3 @@ function traverse(res, time, expr) {
 var compile = function (musexpr) {
   return traverse([], 0, musexpr);
 };
-
-/*
-var playMUS = function(musexpr) {
-  playNote(compile(musexpr));
-};
-*/
-
-/*
-var melody_mus = 
-    { tag: 'seq',
-      left: 
-       { tag: 'seq',
-         left: { tag: 'note', pitch: 'a4', dur: 250 },
-         right: { tag: 'note', pitch: 'b4', dur: 250 } },
-      right:
-       { tag: 'seq',
-         left: { tag: 'note', pitch: 'c4', dur: 500 },
-         right: { tag: 'note', pitch: 'd4', dur: 500 } } };
-
-console.log(melody_mus);
-console.log(compile(melody_mus));
-*/
-
-var melody_mus_rest = 
-    { tag: 'seq',
-      left: 
-       { tag: 'seq',
-         left: { tag: 'note', pitch: 'a4', dur: 250 },
-         right: { tag: 'rest', dur: 100 } },
-      right:
-       { tag: 'seq',
-         left: { tag: 'note', pitch: 'c4', dur: 500 },
-         right: { tag: 'note', pitch: 'd4', dur: 500 } } };
-
-var melody_mus_repeats = 
-  { tag: 'seq',
-    left: 
-    { tag: 'seq',
-      left: { tag: 'note', pitch: 'a4', dur: 250 },
-      right: { tag: 'repeat',
-               section: { tag: 'note', pitch: 'b4', dur: 250 },
-               count: 3 } },
-    right:
-    { tag: 'seq',
-      left: { tag: 'note', pitch: 'c4', dur: 500 },
-      right: { tag: 'note', pitch: 'd4', dur: 500 } } };
-
-console.log(compile(melody_mus_repeats));
-console.log(endTime(0, melody_mus_repeats.left));
-
