@@ -13,7 +13,7 @@ var midiNumbers = { "a0": 22, "b0": 23, "c1": 24, "d1": 26,
                     "g7": 103, "a7": 105, "b7": 107, "c8": 108
                   };
 
-var endTime = function (time, expr) {
+function endTime(time, expr) {
   var duration = function(exp) {
     if(exp.tag === 'note') {
       return exp.dur;
@@ -62,6 +62,6 @@ function traverse(res, time, expr) {
   return res;
 }
 
-var compile = function (musexpr) {
+function compile(musexpr) {
   return traverse([], 0, musexpr);
 };
