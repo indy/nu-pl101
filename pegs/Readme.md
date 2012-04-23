@@ -1,4 +1,9 @@
 
+# getting started
+
+    npm install
+    node lib/pegs.js
+
 # pegs
 
   pegs parser for Nathans University

@@ -1,10 +1,12 @@
 {
-    "name": "pegs"
-  , "version": "0.0.1"
-  , "description": "pegs parser for Nathans University"
-  , "keywords": []
-  , "author": "indy <email@indy.io>"
-  , "dependencies": {}
-  , "main": "index"
-  , "engines": { "node": "0.4.x" }
+  "name": "pegs",
+  "version": "0.0.1",
+  "description": "pegs parser for Nathans University",
+  "keywords": [],
+  "author": "indy <email@indy.io>",
+  "dependencies": {
+    "pegjs":"0.7.0"
+  },
+  "main": "index",
+  "engines": { "node": "0.4.x" }
 }
