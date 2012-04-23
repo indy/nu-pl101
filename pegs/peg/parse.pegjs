@@ -1,17 +1,25 @@
+
 start =
-    expression
+    quotedExpression
+
+quotedExpression =
+    "'" e:expression
+    { return ["quote", e];}
+  / expression
 
 expression =
     atom
-  / "(" s: spacedExpression+ ")"
+  / space* "(" s: spacedExpression+ ")" space*
     {return s;}
 
 spacedExpression = 
-    e: expression space?
+    space* e: quotedExpression space*
     {return e;}
 
 space =
     " "
+  / "\n"
+  / "\t"
 
 validchar = 
     [0-9a-zA-Z_?!+\-=@#$%^&*/.]
