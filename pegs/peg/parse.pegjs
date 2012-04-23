@@ -1,29 +1,27 @@
 
+
 start =
-    quotedExpression
+    expr
 
-quotedExpression =
-    "'" e:expression
-    { return ["quote", e];}
-  / expression
+expr =
+    ignore a:atom ignore { return a; }
+  / ignore "(" e:expr* ")" ignore { return e; }
+  / "'" e:expr { return ["quote", e]; }
 
-expression =
-    atom
-  / space* "(" s: spacedExpression+ ")" space*
-    {return s;}
-
-spacedExpression = 
-    space* e: quotedExpression space*
-    {return e;}
-
-space =
+blank =
     " "
   / "\n"
   / "\t"
+
+ignore =
+    blank* (";;" (!"\n" .)* "\n" blank*)*
 
 validchar = 
     [0-9a-zA-Z_?!+\-=@#$%^&*/.]
 
 atom =
-    chars:validchar+
-        { return chars.join(""); }
+    w:validchar+ { return w.join(""); }
+
+
+
+
