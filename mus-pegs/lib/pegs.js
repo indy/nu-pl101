@@ -86,4 +86,15 @@ pTest("A par of notes with note scoped durations",
                           children: [{ tag: 'note', pitch: 'c1', dur: 100 },
                                      { tag: 'note', pitch: 'd2', dur: 200 }]});
 
+//// rests
+pTest("A rest",
+      "rest:300", { tag: 'rest', dur: 300 });
+
+pTest("A seq of notes+rests with list scoped duration",
+      "{a4 rest b3 rest}:300", {tag: 'seq', 
+                      children: [{ tag: 'note', pitch: 'a4', dur: 300 },
+                                 { tag: 'rest', dur: 300 },
+                                 { tag: 'note', pitch: 'b3', dur: 300 },
+                                 { tag: 'rest', dur: 300 }]});
+
 finish();

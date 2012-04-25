@@ -34,7 +34,8 @@ duration =
     ":" d:number { return d; }
 
 note =
-    a:[a-g] d:[0-8] { return {tag: "note", pitch:a + d} }
+    a:[a-g] d:[0-8] { return {tag: "note", pitch:a + d}; }
+  / "rest" { return {tag: "rest"}; }
 
 number = 
     d:[0-9]+ { return parseInt(d.join("")); }
