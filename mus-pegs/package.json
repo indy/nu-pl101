@@ -1,0 +1,12 @@
+{
+  "name": "mus-pegs",
+  "version": "0.0.1",
+  "description": "mus-pegs parser for Nathans University",
+  "keywords": [],
+  "author": "indy <email@indy.io>",
+  "dependencies": {
+    "pegjs":"0.7.0"
+  },
+  "main": "index",
+  "engines": { "node": "0.4.x" }
+}
