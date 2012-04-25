@@ -89,8 +89,6 @@ assert.deepEqual(compile({ tag: 'seq',
                    { tag: 'note', pitch: 60, dur: 500, start: 500 },
                    { tag: 'note', pitch: 62, dur: 500, start: 1000 } ]);
 
-
-
 console.log("Rests");
 assert.deepEqual(compile({ tag: 'seq',
                            left: 
@@ -107,6 +105,16 @@ assert.deepEqual(compile({ tag: 'seq',
                   { tag: 'note', pitch: 62, dur: 500, start: 1250 } ]);
 
 
+console.log("Harmonies");
+assert.deepEqual(compile({ tag: 'par',
+                           left: { tag: 'note', pitch: 'c4', dur: 250 },
+                           right:
+                           { tag: 'par',
+                             left: { tag: 'note', pitch: 'e4', dur: 250 },
+                             right: { tag: 'note', pitch: 'g4', dur: 250 }}}),
+                 [ { tag: 'note', pitch: 60, dur: 250, start: 0 },
+                   { tag: 'note', pitch: 64, dur: 250, start: 0 },
+                   { tag: 'note', pitch: 67, dur: 250, start: 0 } ]);
 
 console.log("Repeat sections");
 assert.deepEqual(compile({ tag: 'seq',

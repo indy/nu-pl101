@@ -1,0 +1,30 @@
+
+* basic sequence
+
+  play a sequence of a4 b4 c4 d4, each with duration 250 
+
+  {a4 b4 c4 d4}:250
+
+  {a4:250 b4:250 c4:250 d4:250}
+
+* harmonies
+
+  h{c4 e4 g4}:250
+
+* rests
+
+  {
+    rest:500
+    b4:500
+    {c4 d4}:250
+  }
+
+* repeats
+
+  x4 {
+    rest:500
+    b4:500
+    {c4 d4}:250
+  }
+
+* octaves ?
