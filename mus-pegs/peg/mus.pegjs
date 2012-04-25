@@ -1,4 +1,8 @@
 {
+
+function parentTag(tag, e) {
+  return { tag: tag, children: e};
+}
 function applyDuration(notes, d) {
   return notes.map(function(n) {
     if(n.dur === undefined) {
@@ -10,13 +14,17 @@ function applyDuration(notes, d) {
 }
 
 start = 
-    n:seq
+    n:exp
     { return n; }
 
-seq =
+exp =
+    h:heldNote { return h; }
+  / l:list { return parentTag('seq', l); }
+  / "h" l:list { return parentTag('par', l); }
+
+list =
     "{" h:heldNote+ "}" d:duration { return applyDuration(h, d); }
   / "{" h:heldNote+ "}" { return h; }
-  / h:heldNote { return h; }
  
 heldNote =
     n:note d:duration blank* { n["dur"] = d; return n;}
@@ -31,13 +39,8 @@ note =
 number = 
     d:[0-9]+ { return parseInt(d.join("")); }
 
-whitespace =
-    blank* comment*
-
 blank =
     " "
   / "\n"
   / "\t"
 
-comment = 
-    ";;" [^\n]* "\n" blank*

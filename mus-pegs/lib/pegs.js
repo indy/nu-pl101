@@ -48,25 +48,42 @@ pTest("A note with duration",
       "a2:300", { tag: 'note', pitch: 'a2', dur: 300 });
 
 //// Sequences of notes
-pTest("A list of one note with list scoped duration",
-      "{a2}:300", [{ tag: 'note', pitch: 'a2', dur: 300 }]);
+pTest("A seq of one note with list scoped duration",
+      "{a2}:300", {tag: 'seq', 
+                   children: [{ tag: 'note', pitch: 'a2', dur: 300 }]});
 
-pTest("A list of one note with note scoped duration",
-      "{a2:301}", [{ tag: 'note', pitch: 'a2', dur: 301 }]);
+pTest("A seq of one note with note scoped duration",
+      "{a2:301}", {tag: 'seq', 
+                   children: [{ tag: 'note', pitch: 'a2', dur: 301 }]});
 
-pTest("A list notes with list scoped duration",
-      "{a4 b3}:300", [{ tag: 'note', pitch: 'a4', dur: 300 },
-                      { tag: 'note', pitch: 'b3', dur: 300 }]);
+pTest("A seq of notes with list scoped duration",
+      "{a4 b3}:300", {tag: 'seq', 
+                      children: [{ tag: 'note', pitch: 'a4', dur: 300 },
+                                 { tag: 'note', pitch: 'b3', dur: 300 }]});
 
-pTest("A list notes with note scoped durations",
-      "{c1:100 d2:200}", [{ tag: 'note', pitch: 'c1', dur: 100 },
-                          { tag: 'note', pitch: 'd2', dur: 200 }]);
+pTest("A seq of notes with note scoped durations",
+      "{c1:100 d2:200}", {tag: 'seq',
+                          children: [{ tag: 'note', pitch: 'c1', dur: 100 },
+                                     { tag: 'note', pitch: 'd2', dur: 200 }]});
 
+//// Playing notes in harmony
 
+pTest("A par of one note with list scoped duration",
+      "h{a2}:300", {tag: 'par', 
+                   children: [{ tag: 'note', pitch: 'a2', dur: 300 }]});
 
-/*
-pTest("Basic parsing test",
-      "{a2}:300", { tag: 'note', pitch: 'a2' });
-*/
+pTest("A par of one note with note scoped duration",
+      "h{a2:301}", {tag: 'par', 
+                   children: [{ tag: 'note', pitch: 'a2', dur: 301 }]});
+
+pTest("A par of notes with list scoped duration",
+      "h{a4 b3}:300", {tag: 'par', 
+                      children: [{ tag: 'note', pitch: 'a4', dur: 300 },
+                                 { tag: 'note', pitch: 'b3', dur: 300 }]});
+
+pTest("A par of notes with note scoped durations",
+      "h{c1:100 d2:200}", {tag: 'par',
+                          children: [{ tag: 'note', pitch: 'c1', dur: 100 },
+                                     { tag: 'note', pitch: 'd2', dur: 200 }]});
 
 finish();
