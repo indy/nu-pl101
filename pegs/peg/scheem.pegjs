@@ -6,7 +6,6 @@ expr =
   / ignore "(" e:expr* ")" ignore { return e; }
   / "'" e:expr { return ["quote", e]; }
 
-
 ignore =
     blank* comment*
 
