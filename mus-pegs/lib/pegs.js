@@ -97,4 +97,14 @@ pTest("A seq of notes+rests with list scoped duration",
                                  { tag: 'note', pitch: 'b3', dur: 300 },
                                  { tag: 'rest', dur: 300 }]});
 
+//// nested expressions
+pTest("A seq of notes with list scoped duration",
+      "{a4 b3 {c4 d3}:300}:300", { tag: 'seq', 
+       children: [{ tag: 'note', pitch: 'a4', dur: 300 },
+                  { tag: 'note', pitch: 'b3', dur: 300 },
+                  {tag: 'seq', 
+                   children: [{ tag: 'note', pitch: 'c4', dur: 300 },
+                              { tag: 'note', pitch: 'd3', dur: 300 }]}]});
+
+
 finish();

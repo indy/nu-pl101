@@ -5,7 +5,7 @@ function parentTag(tag, e) {
 }
 function applyDuration(notes, d) {
   return notes.map(function(n) {
-    if(n.dur === undefined) {
+    if(n.dur === undefined && (n.tag === 'note' || n.tag === 'rest')) {
       n.dur = d;
     }
     return n;
@@ -23,19 +23,19 @@ exp =
   / "h" l:list { return parentTag('par', l); }
 
 list =
-    "{" h:heldNote+ "}" d:duration { return applyDuration(h, d); }
-  / "{" h:heldNote+ "}" { return h; }
+    "{" h:exp+ "}" d:duration { return applyDuration(h, d); }
+  / "{" h:exp+ "}" { return h; }
  
 heldNote =
     n:note d:duration blank* { n["dur"] = d; return n;}
   / n:note blank* { return n; }
 
-duration =
-    ":" d:number { return d; }
-
 note =
     a:[a-g] d:[0-8] { return {tag: "note", pitch:a + d}; }
   / "rest" { return {tag: "rest"}; }
+
+duration =
+    ":" d:number { return d; }
 
 number = 
     d:[0-9]+ { return parseInt(d.join("")); }
