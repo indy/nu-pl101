@@ -14,8 +14,14 @@ function applyDuration(notes, d) {
 }
 
 start = 
-    n:exp
+    n:repeatingExpression
     { return n; }
+
+repeatingExpression =
+    "x" n:number blank* e:exp blank* { return {tag: 'repeat',
+                                        count: n,
+                                        section: e}; }
+  / exp
 
 exp =
     h:heldNote { return h; }
@@ -24,7 +30,7 @@ exp =
 
 list =
     "{" h:exp+ "}" d:duration { return applyDuration(h, d); }
-  / "{" h:exp+ "}" { return h; }
+  / "{" h:repeatingExpression+ "}" { return h; }
  
 heldNote =
     n:note d:duration blank* { n["dur"] = d; return n;}
