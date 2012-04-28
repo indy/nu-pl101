@@ -42,7 +42,7 @@ start =
     { return tidy(n); }
 
 repeatingExpression =
-    "x" n:number blank* e:exp blank* { return {tag: 'repeat',
+    "repeat" blank* n:number blank* e:exp blank* { return {tag: 'repeat',
                                         count: n,
                                         section: e}; }
   / exp
@@ -50,7 +50,7 @@ repeatingExpression =
 exp =
     h:heldNote { return h; }
   / l:list { return parentTag('seq', l); }
-  / "h" l:list { return parentTag('par', l); }
+  / "harmony" blank* l:list { return parentTag('par', l); }
 
 list =
     "{" h:exp+ "}" d:duration { return applyDuration(h, d); }

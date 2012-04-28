@@ -62,25 +62,29 @@ describe('Sequence of notes', function(){
 describe('Playing notes in harmony', function(){
   
   parse("a par of one note with list scoped duration", 
-        "h{a2}:300",
+        "harmony {a2}:300",
         { tag: 'note', pitch: 'a2', dur: 300 });
 
   parse("a par of one note with list scoped duration", 
-        "h{a2}:300",
+        "harmony{a2}:300",
         { tag: 'note', pitch: 'a2', dur: 300 });
-  
+
+  parse("a par of one note with list scoped duration", 
+        "harmony    {a2}:300",
+        { tag: 'note', pitch: 'a2', dur: 300 });
+
   parse("a par of one note with note scoped duration", 
-        "h{a2:301}",
+        "harmony {a2:301}",
         { tag: 'note', pitch: 'a2', dur: 301 });
 
   parse("a par of notes with list scoped duration", 
-        "h{a4 b3}:300",
+        "harmony {a4 b3}:300",
         {tag: 'par', 
          left:{ tag: 'note', pitch: 'a4', dur: 300 },
          right:{ tag: 'note', pitch: 'b3', dur: 300 }});
   
   parse("a par of notes with note scoped durations", 
-        "h{c1:100 d2:200}",
+        "harmony {c1:100 d2:200}",
         {tag: 'par',
          left:{ tag: 'note', pitch: 'c1', dur: 100 },
          right:{ tag: 'note', pitch: 'd2', dur: 200 }});
@@ -121,7 +125,7 @@ describe('nested expressions', function(){
               right: { tag: 'note', pitch: 'd3', dur: 300 } } } });
 
   parse("a seq of notes with list scoped duration", 
-        "{a4 b3 h{c4 d3}:300}:300",
+        "{a4 b3 harmony {c4 d3}:300}:300",
         { tag: 'seq',
           left: { tag: 'note', pitch: 'a4', dur: 300 },
           right: 
@@ -139,11 +143,11 @@ describe('nested expressions', function(){
 describe('repeats', function(){
 
   parse("repeat a simple note",
-        "x3 a2:300",            // repeat a2 3 times
+        "repeat 3 a2:300",            // repeat a2 3 times
         {tag:"repeat",count:3,section:{tag:"note",pitch:"a2",dur:300}});
-  
+
   parse("a seq of notes with list scoped duration", 
-        "x5 {a4 b3 {c4 d3}:300}:300",
+        "repeat 5 {a4 b3 {c4 d3}:300}:300",
         { tag: 'repeat',
           count: 5,
           section: 
@@ -158,7 +162,7 @@ describe('repeats', function(){
                 right: { tag: 'note', pitch: 'd3', dur: 300 } } } } });
 
   parse("a seq of notes+rests with list scoped duration", 
-        "x99 {a4 rest b3 rest}:300",
+        "repeat 99 {a4 rest b3 rest}:300",
         { tag: 'repeat',
           count: 99,
           section: 
@@ -173,7 +177,7 @@ describe('repeats', function(){
                 right: { tag: 'rest', dur: 300 } } } } });
   
   parse("a seq of notes with note scoped durations", 
-        "{c1:100 x3 a2:300 d2:200}",
+        "{c1:100 repeat 3 a2:300 d2:200}",
         { tag: 'seq',
           left: { tag: 'note', pitch: 'c1', dur: 100 },
           right: 
