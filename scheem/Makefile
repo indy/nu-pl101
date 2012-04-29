@@ -1,5 +1,14 @@
+TESTS = test/*.js
+REPORTER = dot
 
 test:
-	node lib/pegs.js
+	@NODE_ENV=test ./node_modules/.bin/mocha \
+		--reporter $(REPORTER) \
+		--timeout 100 \
+	  --ui bdd \
+		--growl \
+		$(TESTS)
+
+all: test
 
 .PHONY: test
