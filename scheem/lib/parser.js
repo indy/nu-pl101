@@ -8,7 +8,7 @@
 exports.version = '0.0.1';
 
 var PEG = require('pegjs');
-var fs = require('fs'); // for loading files
+var fs = require('fs');
 
 exports.buildParser = function(pegFile) {
   var data = fs.readFileSync(pegFile, 'utf-8');
