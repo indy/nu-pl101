@@ -76,16 +76,16 @@ describe('setting values', function() {
              0, {x:2, y:3, z:10, a:5});
 
   evalShould('set! a value',
-            ['set!', 'z', 1], {x:2, y:3, z:10},
-            0, {x:2, y:3, z:1});
+             ['set!', 'z', 1], {x:2, y:3, z:10},
+             0, {x:2, y:3, z:1});
 
   evalShould('set! a value',
-            ['set!', 'a', 1], {x:2, y:3, z:10},
-            0, {x:2, y:3, z:10, a:1});
+             ['set!', 'a', 1], {x:2, y:3, z:10},
+             0, {x:2, y:3, z:10, a:1});
 
   evalShould('set! a value',
-            ['set!', 'y', ['+', 'x', 5]], {x:2, y:3, z:10},
-            0, {x:2, y:7, z:10});
+             ['set!', 'y', ['+', 'x', 5]], {x:2, y:3, z:10},
+             0, {x:2, y:7, z:10});
 
 });
 
@@ -133,5 +133,75 @@ describe('quote', function() {
   evalShould('should quote a list 3',
              ['quote', ['quote', ['+', 2, 3]]], {},
              ['quote', ['+', 2, 3]]);
+
+});
+
+
+describe('working with values', function() {
+
+  evalShould('compare values 1',
+             ['<', 2, 2], {}, 
+             '#f');
+
+  evalShould('compare values 2',
+             ['<', 2, 3], {}, 
+             '#t');
+  
+  evalShould('compare values 2',
+             ['<', ['+', 1, 1], ['+', 2, 3]], {}, 
+             '#t');
+  
+});
+
+
+describe('working with lists', function() {
+
+  evalShould('(quote (2 3))',
+             ['quote', [2, 3]], {}, 
+             [2, 3]);
+
+  evalShould("(cons 1 '(2 3))",
+             ['cons', 1, ['quote', [2, 3]]], {}, 
+             [1, 2, 3]);
+
+  evalShould("(cons '(1 2) '(3 4))",
+             ['cons', 
+              ['quote', [1, 2]], ['quote', [3, 4]]], {}, 
+             [[1, 2], 3, 4]);
+
+  evalShould("(car '((1 2) 3 4))",
+             ['car', ['quote', [[1, 2], 3, 4]]], {}, 
+             [1, 2]);
+
+  evalShould("(cdr '((1 2) 3 4))",
+             ['cdr', ['quote', [[1, 2], 3, 4]]], {}, 
+             [3, 4]);
+  
+});
+
+
+describe('conditionals', function() {
+
+  evalShould('(if (= 1 1) 2 3) test',
+             ['if', ['=', 1, 1], 2, 3], {},
+             2);
+
+
+  evalShould('(if (= 1 0) 2 3) test',
+             ['if', ['=', 1, 0], 2, 3], {},
+             3);
+
+  evalShould('(if (= 1 1) 2 error) test',
+             ['if', ['=', 1, 1], 2, 'error'], {}, 
+             2);
+
+  evalShould('(if (= 1 1) error 3) test',
+             ['if', ['=', 1, 0], 'error', 3], {},
+             3);
+
+  evalShould('(if (= 1 1) (if (= 2 3) 10 11) 12) test',
+             ['if', ['=', 1, 1],
+              ['if', ['=', 2, 3], 10, 11], 12], {},
+             11);
 
 });
