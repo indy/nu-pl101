@@ -1,9 +1,19 @@
-var assert = require('assert');
-var parser = require('../lib/parser');
+
+if (typeof module !== 'undefined') {
+  var fs = require('fs');
+  var chai = require('chai');
+  var assert = chai.assert;
+  var parser = require('../lib/parser');
+
+} else {
+  // In browser assume already loaded by <script> tags
+  var assert = chai.assert;
+}
+
 
 var parse = (function() {
-
-  var scheemParser = parser.buildParser('peg/scheem.pegjs');
+  var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
+  var scheemParser = parser.buildParser(pegDef);
 
   return function(txt, form, expected) {
     test(txt, function() {

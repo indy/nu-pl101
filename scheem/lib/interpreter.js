@@ -1,10 +1,33 @@
-var parser = require('./parser');
+if (typeof module !== 'undefined') {
+  var fs = require('fs');
+  var parser = require('./parser');
+  var buildParser = parser.buildParser;
+}
 
-var evlString = function(string, env) {
-  var scheemParser = parser.buildParser('peg/scheem.pegjs');
-  var expr = scheemParser(string);
 
-  return evalScheem(expr, env);
+function makepegdef() {
+  
+}
+
+var evlString;
+if (typeof module !== 'undefined') {
+  // node.js
+  evlString = function(string, env) {
+    var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
+    var scheemParser = buildParser(pegDef);
+    var expr = scheemParser(string);
+    return evalScheem(expr, env);
+  }
+
+} else {
+  // browser
+  evlString = function(string, env) {
+    var pegDef = "start =\n    expr\n\nexpr =\n    ignore a:atom ignore { return a; }\n  / ignore \"(\" e:expr* \")\" ignore { return e; }\n  / \"'\" e:expr { return [\"quote\", e]; }\n\nignore =\n    blank* comment*\n\nblank =\n    \" \"\n  / \"\\n\"\n  / \"\\t\"\n\ncomment = \n    \";;\" [^\\n]* \"\\n\" blank*\n\nvalidchar = \n    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]\n\nnumber =\n    [0-9]\n\natom =\n    n:number+ { return parseInt(n.join(\"\"), 10); }\n  / w:validchar+ { return w.join(\"\"); }";
+
+    var scheemParser = buildParser(pegDef);
+    var expr = scheemParser(string);
+    return evalScheem(expr, env);
+  }
 }
 
 var evl = function (expr, env) {
