@@ -126,4 +126,12 @@ describe('quote', function() {
              ['quote', [1, 2, 3]], {},
              [1, 2, 3]);
 
+  evalShould('should quote a list 2',
+             ['quote', ['+', 2, 3]], {},
+             ['+', 2, 3]);
+
+  evalShould('should quote a list 3',
+             ['quote', ['quote', ['+', 2, 3]]], {},
+             ['quote', ['+', 2, 3]]);
+
 });
