@@ -5,7 +5,7 @@ test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--reporter $(REPORTER) \
 		--timeout 100 \
-	  --ui bdd \
+	  --ui tdd \
 		--growl \
 		$(TESTS)
 

@@ -6,7 +6,7 @@ var parse = (function() {
   var scheemParser = parser.buildParser('peg/scheem.pegjs');
 
   return function(txt, form, expected) {
-    it(txt, function() {
+    test(txt, function() {
       var res = scheemParser(form);
       assert.deepEqual(res, expected );
     });
@@ -15,14 +15,14 @@ var parse = (function() {
 })();
 
 
-describe('Basic parsing', function(){
+suite('Basic parsing', function(){
 
   parse("Basic parsing test",
         "(a b c)", ["a", "b", "c"]);
 
 });
 
-describe('Whitespace', function(){
+suite('Whitespace', function(){
 
   parse("Allow any number of spaces between atoms",
         "(a   b   c)", ["a", "b", "c"]);
@@ -33,14 +33,15 @@ describe('Whitespace', function(){
 });
 
 
-describe('Quotes', function() {
+suite('Quotes', function() {
   parse("expand quote syntax",
         "'(a b c)", ["quote", ["a", "b", "c"]]);
   parse("expand quote syntax within a form",
         "(a b c '(d))", ["a", "b", "c", ["quote", ["d"]]]);
 });
 
-describe('Comments', function() {
+suite('Comments', function() {
   parse("Lines that start with ;; should be ignored by the parser",
         "(a b ;; this is a comment \nc)", ["a", "b", "c"]);
 });
+

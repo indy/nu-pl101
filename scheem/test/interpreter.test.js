@@ -16,7 +16,7 @@ if (typeof module !== 'undefined') {
 function evalShould(desc, 
                     expression, env, 
                     expectedRes, expectedEnv) {
-  it(desc, function() {
+  test(desc, function() {
     assert.deepEqual(evalScheem(expression, env), 
                      expectedRes);
 
@@ -27,7 +27,7 @@ function evalShould(desc,
   });
 }
 
-describe('arithmetic', function() {
+suite('arithmetic', function() {
 
   evalShould('return a number',
              5, {},
@@ -55,7 +55,9 @@ describe('arithmetic', function() {
 
 });
 
-describe('variables', function() {
+
+
+suite('variables', function() {
   
   evalShould('return a number',
              5, {x:2, y:3, z:10},
@@ -79,7 +81,7 @@ describe('variables', function() {
 
 });
 
-describe('setting values', function() {
+suite('setting values', function() {
 
   evalShould('define a value',
              ['define', 'a', 5], {x:2, y:3, z:10},
@@ -99,7 +101,7 @@ describe('setting values', function() {
 
 });
 
-describe('begin', function() {
+suite('begin', function() {
 
   evalShould('begin 1',
              ['begin', 1, 2, 3], {},
@@ -122,7 +124,7 @@ describe('begin', function() {
 
 });
 
-describe('quote', function() {
+suite('quote', function() {
 
   evalShould('quote a number',
              ['quote', 3], {}, 
@@ -147,7 +149,7 @@ describe('quote', function() {
 });
 
 
-describe('working with values', function() {
+suite('working with values', function() {
 
   evalShould('compare values 1',
              ['<', 2, 2], {}, 
@@ -164,7 +166,7 @@ describe('working with values', function() {
 });
 
 
-describe('working with lists', function() {
+suite('working with lists', function() {
 
   evalShould('(quote (2 3))',
              ['quote', [2, 3]], {}, 
@@ -190,7 +192,7 @@ describe('working with lists', function() {
 });
 
 
-describe('conditionals', function() {
+suite('conditionals', function() {
 
   evalShould('(if (= 1 1) 2 3) test',
              ['if', ['=', 1, 1], 2, 3], {},
@@ -215,3 +217,4 @@ describe('conditionals', function() {
              11);
 
 });
+
