@@ -1,2 +1,2 @@
 
-module.exports = require('./lib/pegs');
+module.exports = require('./lib/interpreter');
