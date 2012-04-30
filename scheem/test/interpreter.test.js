@@ -47,57 +47,70 @@ describe('arithmetic', function() {
 
 describe('variables', function() {
   
-  var env = {x:2, y:3, z:10};
-
   evalShould('return a number',
-             5, env,
+             5, {x:2, y:3, z:10},
              5);
 
   evalShould('lookup a variable',
-             'x', env,
+             'x', {x:2, y:3, z:10},
              2);
 
   evalShould('add two numbers',
-             ['+', 2, 3], env,
+             ['+', 2, 3], {x:2, y:3, z:10},
              5);
 
   evalShould('multiply a number and variable',
-             ['*', 'y', 3], env,
+             ['*', 'y', 3], {x:2, y:3, z:10},
              9);
 
   evalShould('combined variables',
-             ['/', 'z', ['+', 'x', 'y']], env,
+             ['/', 'z', ['+', 'x', 'y']], {x:2, y:3, z:10},
              2);
 
 });
 
 describe('setting values', function() {
 
-  var env = {x:2, y:3, z:10};
-
   evalShould('define a value',
-             ['define', 'a', 5], env,
+             ['define', 'a', 5], {x:2, y:3, z:10},
              0, {x:2, y:3, z:10, a:5});
 
-  env = {x:2, y:3, z:10};
   evalShould('set! a value',
-            ['set!', 'z', 1], env,
+            ['set!', 'z', 1], {x:2, y:3, z:10},
             0, {x:2, y:3, z:1});
 
-  env = {x:2, y:3, z:10};
   evalShould('set! a value',
-            ['set!', 'a', 1], env,
+            ['set!', 'a', 1], {x:2, y:3, z:10},
             0, {x:2, y:3, z:10, a:1});
 
-  env = {x:2, y:3, z:10};
   evalShould('set! a value',
-            ['set!', 'y', ['+', 'x', 5]], env,
+            ['set!', 'y', ['+', 'x', 5]], {x:2, y:3, z:10},
             0, {x:2, y:7, z:10});
 
 });
 
+describe('begin', function() {
 
+  evalShould('begin 1',
+             ['begin', 1, 2, 3], {},
+             3);
 
+  evalShould('begin 2',
+             ['begin', ['+', 2, 2]], {},
+             4);
+
+  evalShould('begin 3',
+             ['begin', 'x', 'y', 'x'], {x:1, y:2},
+             1);
+
+  evalShould('begin 3',
+             ['begin', 
+              ['set!', 'x', 5], 
+              ['set!', 'x', ['+', 'y', 'x']], 
+              'x'], {x:1, y:2},
+             7);
+
+});
 
 describe('quote', function() {
 
@@ -114,5 +127,3 @@ describe('quote', function() {
              [1, 2, 3]);
 
 });
-
-
