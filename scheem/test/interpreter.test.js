@@ -1,11 +1,19 @@
 var interpreter = require('../lib/interpreter');
 var chai = require('chai');
 var assert = chai.assert;
+var expect = chai.expect;
 
-function evalShould(desc, expression, env, expected) {
+function evalShould(desc, 
+                    expression, env, 
+                    expectedRes, expectedEnv) {
   it(desc, function() {
     assert.deepEqual(interpreter.evalScheem(expression, env), 
-                     expected);
+                     expectedRes);
+
+    if(expectedEnv !== undefined) {
+      assert.deepEqual(expectedEnv, env);
+    }
+
   });
 }
 
@@ -63,6 +71,34 @@ describe('variables', function() {
 
 });
 
+describe('setting values', function() {
+
+  var env = {x:2, y:3, z:10};
+
+  evalShould('define a value',
+             ['define', 'a', 5], env,
+             0, {x:2, y:3, z:10, a:5});
+
+  env = {x:2, y:3, z:10};
+  evalShould('set! a value',
+            ['set!', 'z', 1], env,
+            0, {x:2, y:3, z:1});
+
+  env = {x:2, y:3, z:10};
+  evalShould('set! a value',
+            ['set!', 'a', 1], env,
+            0, {x:2, y:3, z:10, a:1});
+
+  env = {x:2, y:3, z:10};
+  evalShould('set! a value',
+            ['set!', 'y', ['+', 'x', 5]], env,
+            0, {x:2, y:7, z:10});
+
+});
+
+
+
+
 describe('quote', function() {
 
   evalShould('quote a number',
@@ -78,4 +114,5 @@ describe('quote', function() {
              [1, 2, 3]);
 
 });
+
 
