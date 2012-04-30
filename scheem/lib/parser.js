@@ -5,19 +5,26 @@
  * MIT Licensed
 */
 
-if (typeof module !== 'undefined') {
-    var PEG = require('pegjs');
+
+
+if(typeof(Scheem) === 'undefined') {
+  Scheem = {};
 }
 
+Scheem.parser = {};
 
-buildParser = function(pegData) {
+if (typeof module !== 'undefined') {
+  var PEG = require('pegjs');
+}
+
+Scheem.parser.buildParser = function(pegData) {
   return PEG.buildParser(pegData).parse;
 }
 
-
-
 if (typeof module !== 'undefined') {
   module.exports.version = '0.0.1';
-  module.exports.buildParser = buildParser;
+  module.exports.buildParser = Scheem.parser.buildParser;
 }
+
+
 

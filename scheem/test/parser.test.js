@@ -5,15 +5,46 @@ if (typeof module !== 'undefined') {
   var assert = chai.assert;
   var parser = require('../lib/parser');
 
+  var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
+
 } else {
   // In browser assume already loaded by <script> tags
   var assert = chai.assert;
+  var parser = Scheem.parser;
+
+  function makepegdef() {
+    var peg = ["start =",
+               "    expr",
+               "expr =",
+               "    ignore a:atom ignore { return a; }",
+               "  / ignore \"(\" e:expr* \")\" ignore { return e; }",
+               "  / \"'\" e:expr { return [\"quote\", e]; }",
+               "ignore =",
+               "    blank* comment*",
+               "blank =",
+               "    \" \"",
+               "  / \"\\n\"",
+               "  / \"\\t\"",
+               "comment = ",
+               "    \";;\" [^\\n]* \"\\n\" blank*",
+               "validchar = ",
+               "    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]",
+               "number =",
+               "    [0-9]",
+               "atom =",
+               "    n:number+ { return parseInt(n.join(\"\"), 10); }",
+               "  / w:validchar+ { return w.join(\"\"); }"];
+    return peg.join("\n");
+  };
+  var pegDef = makepegdef();
+
 }
 
+var scheemParser = parser.buildParser(pegDef);  
 
 var parse = (function() {
-  var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
-  var scheemParser = parser.buildParser(pegDef);
+//  var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
+//  var scheemParser = parser.buildParser(pegDef);
 
   return function(txt, form, expected) {
     test(txt, function() {

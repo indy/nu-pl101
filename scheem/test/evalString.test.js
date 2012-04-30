@@ -4,13 +4,9 @@ if (typeof module !== 'undefined') {
   var interpreter = require('../lib/interpreter');
   var evalScheemString = interpreter.evalScheemString;
   var chai = require('chai');
-  var assert = chai.assert;
-  var expect = chai.expect;
 
 } else {
-  // In browser assume already loaded by <script> tags
-  var assert = chai.assert;
-  var expect = chai.expect;
+  var evalScheemString = Scheem.interpreter.evalScheemString;
 }
 
 function evalShould(desc, 
@@ -18,11 +14,11 @@ function evalShould(desc,
                     expectedRes, expectedEnv) {
   test(desc, function() {
 
-    assert.deepEqual(evalScheemString(str, env), 
+    chai.assert.deepEqual(evalScheemString(str, env), 
                      expectedRes);
 
     if(expectedEnv !== undefined) {
-      assert.deepEqual(expectedEnv, env);
+      chai.assert.deepEqual(expectedEnv, env);
     }
 
   });
