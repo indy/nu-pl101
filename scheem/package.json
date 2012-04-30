@@ -1,7 +1,7 @@
 {
-  "name": "pegs",
+  "name": "scheem",
   "version": "0.0.1",
-  "description": "pegs parser for Nathans University",
+  "description": "A scheme called scheem implemented for Nathans University",
   "keywords": [],
   "author": "indy <email@indy.io>",
   "dependencies": {
