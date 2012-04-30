@@ -1,3 +1,11 @@
+var parser = require('./parser');
+
+var evlString = function(string, env) {
+  var scheemParser = parser.buildParser('peg/scheem.pegjs');
+  var expr = scheemParser(string);
+
+  return evalScheem(expr, env);
+}
 
 var evl = function (expr, env) {
   var i, xs, x, res, op;
@@ -36,6 +44,8 @@ var evl = function (expr, env) {
     return res;
   case 'quote':
     return expr[1];
+  case "'":
+    return expr[1];
 
   case '=':
     op = (evl(expr[1], env) === evl(expr[2], env));
@@ -73,9 +83,11 @@ var evl = function (expr, env) {
 };
 
 var evalScheem = evl;
+var evalScheemString = evlString;
 
 // If we are used as Node module, export evalScheem
 if (typeof module !== 'undefined') {
     module.exports.evalScheem = evalScheem;
+    module.exports.evalScheemString = evalScheemString;
 }
 

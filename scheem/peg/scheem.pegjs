@@ -18,7 +18,7 @@ comment =
     ";;" [^\n]* "\n" blank*
 
 validchar = 
-    [a-zA-Z0-9_?!+\-=@#$%^&*/.]
+    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]
 
 number =
     [0-9]
