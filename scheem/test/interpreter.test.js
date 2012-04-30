@@ -1,13 +1,23 @@
-var interpreter = require('../lib/interpreter');
-var chai = require('chai');
-var assert = chai.assert;
-var expect = chai.expect;
+
+if (typeof module !== 'undefined') {
+  // In Node load required modules
+  var interpreter = require('../lib/interpreter');
+  var evalScheem = interpreter.evalScheem;
+  var chai = require('chai');
+  var assert = chai.assert;
+  var expect = chai.expect;
+
+} else {
+  // In browser assume already loaded by <script> tags
+  var assert = chai.assert;
+  var expect = chai.expect;
+}
 
 function evalShould(desc, 
                     expression, env, 
                     expectedRes, expectedEnv) {
   it(desc, function() {
-    assert.deepEqual(interpreter.evalScheem(expression, env), 
+    assert.deepEqual(evalScheem(expression, env), 
                      expectedRes);
 
     if(expectedEnv !== undefined) {

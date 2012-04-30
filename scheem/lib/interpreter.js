@@ -72,5 +72,10 @@ var evl = function (expr, env) {
 
 };
 
+var evalScheem = evl;
 
-module.exports.evalScheem = evl;
+// If we are used as Node module, export evalScheem
+if (typeof module !== 'undefined') {
+    module.exports.evalScheem = evalScheem;
+}
+
