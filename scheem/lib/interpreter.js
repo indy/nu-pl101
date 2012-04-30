@@ -2,18 +2,8 @@ if (typeof module !== 'undefined') {
   var fs = require('fs');
   var parser = require('./parser');
   var buildParser = parser.buildParser;
-}
 
-var evlString;
-if (typeof module !== 'undefined') {
-  // node.js
-  evlString = function(string, env) {
-    var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
-    var scheemParser = buildParser(pegDef);
-    var expr = scheemParser(string);
-    return evalScheem(expr, env);
-  }
-
+  var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
 } else {
 
   function makepegdef() {
@@ -39,15 +29,16 @@ if (typeof module !== 'undefined') {
                "    n:number+ { return parseInt(n.join(\"\"), 10); }",
                "  / w:validchar+ { return w.join(\"\"); }"];
     return peg.join("\n");
-  }
+  };
+  var pegDef = makepegdef();
 
-  // browser
-  evlString = function(string, env) {
-    pegDef = makepegdef();
-    var scheemParser = buildParser(pegDef);
-    var expr = scheemParser(string);
-    return evalScheem(expr, env);
-  }
+}
+
+var scheemParser = buildParser(pegDef);  
+
+var evlString = function(string, env) {
+  var expr = scheemParser(string);
+  return evalScheem(expr, env);
 }
 
 var evl = function (expr, env) {
