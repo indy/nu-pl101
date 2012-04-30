@@ -18,7 +18,12 @@ comment =
     ";;" [^\n]* "\n" blank*
 
 validchar = 
-    [0-9a-zA-Z_?!+\-=@#$%^&*/.]
+    [a-zA-Z0-9_?!+\-=@#$%^&*/.]
+
+number =
+    [0-9]
 
 atom =
-    w:validchar+ { return w.join(""); }
+    n:number+ { return parseInt(n.join(""), 10); }
+  / w:validchar+ { return w.join(""); }
+

@@ -45,3 +45,18 @@ suite('Comments', function() {
         "(a b ;; this is a comment \nc)", ["a", "b", "c"]);
 });
 
+
+suite('Numbers are numbers', function() {
+  parse('single digits are numbers',
+        "5", 5);
+
+  parse('multiple digits are numbers',
+        "25", 25);
+
+  parse('numbers appear in lists',
+        "(1 2 3 4 5)", [1, 2, 3, 4, 5]);
+
+  parse("variables can end in numbers",
+        "(a1 b22 c333)", ["a1", "b22", "c333"]);
+
+});
