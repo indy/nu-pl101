@@ -4,11 +4,6 @@ if (typeof module !== 'undefined') {
   var buildParser = parser.buildParser;
 }
 
-
-function makepegdef() {
-  
-}
-
 var evlString;
 if (typeof module !== 'undefined') {
   // node.js
@@ -20,10 +15,35 @@ if (typeof module !== 'undefined') {
   }
 
 } else {
+
+  function makepegdef() {
+    var peg = ["start =",
+               "    expr",
+               "expr =",
+               "    ignore a:atom ignore { return a; }",
+               "  / ignore \"(\" e:expr* \")\" ignore { return e; }",
+               "  / \"'\" e:expr { return [\"quote\", e]; }",
+               "ignore =",
+               "    blank* comment*",
+               "blank =",
+               "    \" \"",
+               "  / \"\\n\"",
+               "  / \"\\t\"",
+               "comment = ",
+               "    \";;\" [^\\n]* \"\\n\" blank*",
+               "validchar = ",
+               "    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]",
+               "number =",
+               "    [0-9]",
+               "atom =",
+               "    n:number+ { return parseInt(n.join(\"\"), 10); }",
+               "  / w:validchar+ { return w.join(\"\"); }"];
+    return peg.join("\n");
+  }
+
   // browser
   evlString = function(string, env) {
-    var pegDef = "start =\n    expr\n\nexpr =\n    ignore a:atom ignore { return a; }\n  / ignore \"(\" e:expr* \")\" ignore { return e; }\n  / \"'\" e:expr { return [\"quote\", e]; }\n\nignore =\n    blank* comment*\n\nblank =\n    \" \"\n  / \"\\n\"\n  / \"\\t\"\n\ncomment = \n    \";;\" [^\\n]* \"\\n\" blank*\n\nvalidchar = \n    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]\n\nnumber =\n    [0-9]\n\natom =\n    n:number+ { return parseInt(n.join(\"\"), 10); }\n  / w:validchar+ { return w.join(\"\"); }";
-
+    pegDef = makepegdef();
     var scheemParser = buildParser(pegDef);
     var expr = scheemParser(string);
     return evalScheem(expr, env);
