@@ -1,6 +1,6 @@
 
 /*!
- * pegs
+ * scheem parser
  * Copyright(c) 2012 indy <email@indy.io>
  * MIT Licensed
  */
