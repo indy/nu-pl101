@@ -14,7 +14,7 @@ test:
 
 # compile the peg/scheem.pegjs file when we're using a browser
 peg:
-	./node_modules/pegjs/bin/pegjs -e ScheemPeg peg/scheem.pegjs public/js/built/precompiledPeg.js
+	./node_modules/pegjs/bin/pegjs -e ScheemPeg peg/scheem.pegjs public/js/precompiledPeg.js
 
 prepare:
 	npm install
