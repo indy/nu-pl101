@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-  <script src="http://nathansuniversity.com/js/jquery-1.7.1.min.js"></script>
+  <script src="js/jquery-1.7.1.min.js"></script>
   <script src="../node_modules/pegjs/lib/peg.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
@@ -13,15 +13,9 @@
   <script src="../lib/parser.js"></script>
   <script src="../lib/interpreter.js"></script>
 
-  <script src="parser.test.js"></script>
-  <script src="interpreter.test.js"></script>
-  <script src="evalString.test.js"></script>
-
-  <script>
-    $(function(){
-      mocha.run();
-    });
-  </script>
+  <script src="../test/parser.test.js"></script>
+  <script src="../test/interpreter.test.js"></script>
+  <script src="js/test.js"></script>
 </head>
 <body>
   <div id="mocha"></div>
