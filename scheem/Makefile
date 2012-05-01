@@ -1,6 +1,9 @@
 TESTS = test/*.js
 REPORTER = dot
 
+setup:
+	$(MAKE) prepare && $(MAKE) peg
+
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--reporter $(REPORTER) \
@@ -13,7 +16,9 @@ test:
 peg:
 	./node_modules/pegjs/bin/pegjs -e ScheemPeg peg/scheem.pegjs public/js/built/precompiledPeg.js
 
+prepare:
+	npm install
 
 all: test
 
-.PHONY: test peg
+.PHONY: test peg prepare setup
