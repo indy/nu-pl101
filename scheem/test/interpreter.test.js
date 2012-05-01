@@ -6,28 +6,28 @@ if (typeof module !== 'undefined') {
   var peg = require('../lib/peg');
   var parser = require('../lib/parser');
   var evalScheem = interpreter.evalScheem;
-  var evalScheemString = interpreter.evalScheemString;
+  var scheemParser = parser.buildParser(peg.pegDef);  
 } else {
   // In browser assume already loaded by <script> tags
   var peg = Scheem.peg;
   var parser = Scheem.parser;
   var evalScheem = Scheem.interpreter.evalScheem;
-  var evalScheemString = Scheem.interpreter.evalScheemString;
+  var scheemParser = parser.buildParser();
 }
-
-// evalTest also compares the resultant AST, so we'll need
-// the parser
-var scheemParser = parser.buildParser(peg.pegDef);  
 
 function evalTest(str, env, expected) {
   test(str, function() {
-    chai.assert.deepEqual(evalScheemString(str, env), 
-                          expected.res);
+
+    var ast = scheemParser(str);
+    chai.assert.deepEqual(expected.ast, ast);
+
+    var res = evalScheem(ast, env);
+
+    chai.assert.deepEqual(res, expected.res);
     if(expected.env !== undefined) {
       chai.assert.deepEqual(expected.env, env);
     }
 
-    chai.assert.deepEqual(expected.ast, scheemParser(str));
   });
 }
 

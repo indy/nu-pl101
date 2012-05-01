@@ -10,21 +10,6 @@ if(typeof(Scheem) === 'undefined') {
 
 Scheem.interpreter = (function() {
 
-  if (typeof module !== 'undefined') {
-    var peg = require('./peg');
-    var parser = require('./parser');
-  } else {
-    var peg = Scheem.peg;
-    var parser = Scheem.parser;
-  }
-
-  var scheemParser = parser.buildParser(peg.pegDef);  
-
-  var evlString = function(string, env) {
-    var expr = scheemParser(string);
-    return evl(expr, env);
-  }
-
   var evl = function (expr, env) {
     var i, xs, x, res, op;
 
@@ -106,8 +91,7 @@ Scheem.interpreter = (function() {
   };
 
   return {
-    evalScheem: evl,
-    evalScheemString: evlString
+    evalScheem: evl
   };
 
 })();
@@ -115,5 +99,4 @@ Scheem.interpreter = (function() {
 // If we are used as Node module, export evalScheem
 if (typeof module !== 'undefined') {
     module.exports.evalScheem = Scheem.interpreter.evalScheem;
-    module.exports.evalScheemString = Scheem.interpreter.evalScheemString;
 }
