@@ -287,6 +287,10 @@ suite('quote: ', function() {
              env:{},
              res:['quote', ['+', 2, 3]]
            });
+
+  evalShouldThrow("when more than 1 expression follows quote", 
+                  ['quote', 'y', 42], {});
+
 });
 
 

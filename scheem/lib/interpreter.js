@@ -65,10 +65,11 @@ Scheem.interpreter = (function() {
       }
       return res;
     case 'quote':
-      return expr[1];
-    case "'":
-      return expr[1];
-
+      if(expr.length !== 2) {
+        throw "need a single expression after 'quote'";
+      } else {
+        return expr[1];
+      }
     case '=':
       op = (evl(expr[1], env) === evl(expr[2], env));
       return op ? '#t' : '#f';
