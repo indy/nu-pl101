@@ -53,7 +53,11 @@ Scheem.interpreter = (function() {
       env[expr[1]] = evl(expr[2], env);
       return 0;
     case 'set!':
-      env[expr[1]] = evl(expr[2], env);
+      if(env[expr[1]] === undefined) {
+        throw "trying to set! an undefined variable: " + expr[1];
+      } else {
+        env[expr[1]] = evl(expr[2], env);
+      }
       return 0;
     case 'begin':
       for(i=1;i<expr.length;i+=1) {
