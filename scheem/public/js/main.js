@@ -6,10 +6,9 @@ var log_console = function(msg) {
 // After page load
 $(function() {
 
-  var peg = Scheem.peg;
   var parser = Scheem.parser;
 
-  var scheemParser = parser.buildParser(peg.pegDef);
+  var scheemParser = parser.buildParser();
   var evalScheem = Scheem.interpreter.evalScheem;
 
   $('#submitbutton').click(function() {

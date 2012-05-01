@@ -14,16 +14,18 @@ if(typeof(Scheem) === 'undefined') {
 Scheem.parser = {};
 
 if (typeof module !== 'undefined') {
+  var fs = require('fs');
   var PEG = require('pegjs');
 } else {
   Scheem.parser.precompiledPeg = true;
 }
 
-Scheem.parser.buildParser = function(pegData) {
+Scheem.parser.buildParser = function() {
   if(Scheem.parser.precompiledPeg === true) {
     return ScheemPeg.parse;
   } else {
-    return PEG.buildParser(pegData).parse;
+    var pegDef = fs.readFileSync('peg/scheem.pegjs', 'utf-8');
+    return PEG.buildParser(pegDef).parse;
   }
 }
 

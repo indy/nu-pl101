@@ -3,17 +3,16 @@ if (typeof module !== 'undefined') {
   // In Node load required modules
   var chai = require('chai');
   var interpreter = require('../lib/interpreter');
-  var peg = require('../lib/peg');
   var parser = require('../lib/parser');
-  var evalScheem = interpreter.evalScheem;
-  var scheemParser = parser.buildParser(peg.pegDef);  
+
 } else {
   // In browser assume already loaded by <script> tags
-  var peg = Scheem.peg;
   var parser = Scheem.parser;
-  var evalScheem = Scheem.interpreter.evalScheem;
-  var scheemParser = parser.buildParser();
+  var interpreter = Scheem.interpreter;
 }
+
+var evalScheem = interpreter.evalScheem;
+var scheemParser = parser.buildParser();  
 
 function evalTest(str, env, expected) {
   test(str, function() {
