@@ -56,12 +56,28 @@ suite('arithmetic: ', function() {
              res:5
            });
 
+  evalTest('(+ 2 3 4 5)',
+           {},
+           {
+             ast:['+', 2, 3, 4, 5],
+             env:{},
+             res:14
+           });
+
   evalTest('(* 2 3)',
            {},
            {
              ast:['*', 2, 3],
              env:{},
              res:6
+           });
+
+  evalTest('(* 2 3 4)',
+           {},
+           {
+             ast:['*', 2, 3, 4],
+             env:{},
+             res:24
            });
 
   evalTest('(- 5 3)',

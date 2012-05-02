@@ -10,6 +10,16 @@ if(typeof(Scheem) === 'undefined') {
 
 Scheem.interpreter = (function() {
 
+
+  var eachArgument = function(expr, env, fn) {
+    var i;
+    var res = evl(expr[1], env);
+    for(i=2;i<expr.length;i++) {
+      res = fn(res, evl(expr[i], env));
+    }
+    return res;
+  }
+
   var evl = function (expr, env) {
     var i, xs, x, res, op;
 
@@ -26,13 +36,14 @@ Scheem.interpreter = (function() {
     // Look at head of list for operation
     switch (expr[0]) {
     case '+':
-      return evl(expr[1], env) + evl(expr[2], env);
+      return eachArgument(expr, env, function(a, b) {return a + b;});
     case '-':
-      return evl(expr[1], env) - evl(expr[2], env);
+      return eachArgument(expr, env, function(a, b) {return a - b;});
     case '*':
-      return evl(expr[1], env) * evl(expr[2], env);
+      return eachArgument(expr, env, function(a, b) {return a * b;});
     case '/':
-      return evl(expr[1], env) / evl(expr[2], env);
+      return eachArgument(expr, env, function(a, b) {return a / b;});
+
 
     case 'define':
       env[expr[1]] = evl(expr[2], env);
