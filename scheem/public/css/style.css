@@ -1,0 +1,13 @@
+
+
+#edit-pane {
+  display: block;
+  float: left;
+  width:50%;
+}
+
+#results-pane {
+  display: block;
+  float: left;
+  width:50%;
+}

@@ -10,10 +10,12 @@
   <script src="codemirror/lib/codemirror.js"></script>
   <script src="codemirror/mode/scheme/scheme.js"></script>
   <script src="codemirror/mode/diff/diff.js"></script>
+  <script src="codemirror/mode/javascript/javascript.js"></script>
   <link rel="stylesheet" href="codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="codemirror/theme/ambiance.css">
   <link rel="stylesheet" href="codemirror/mode/diff/diff.css">
 
+  <link rel="stylesheet" href="css/style.css">
   <script src="js/precompiledPeg.js"></script>
 
   <script src="../lib/parser.js"></script>
@@ -22,9 +24,22 @@
 </head>
 <body>
 
-  <div id="editor"></div>
-  <input id="submitbutton" type="button" value="Run">
-  <div id="myconsole"></div>
+
+  <h1>Scheem Editor</h1>
+
+  <div id="edit-pane">
+    <input id="run" type="button" value="Run">
+    <input id="clear-output" type="button" value="Clear Output">
+    <input id="clear-environment" type="button" value="Clear Environment">
+    <div id="editor"></div>
+  </div>
+
+  <div id="results-pane">
+    <h2>Output</h2>
+    <div id="console"></div>
+    <h2>Environment</h2>
+    <div id="environment"></div>
+  </div>
 
 <script src="js/main.js"></script>
 

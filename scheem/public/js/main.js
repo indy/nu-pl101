@@ -1,8 +1,9 @@
-function Con(id) {
-  this.console = CodeMirror(document.getElementById("myconsole"), {
-    mode: "diff",
+function Con(id, mode) {
+  this.console = CodeMirror(document.getElementById(id), {
+    mode: mode,
     lineNumbers: true
   });
+
   this.content = "";
 
   this.log = function(msg) {
@@ -10,6 +11,11 @@ function Con(id) {
     this.console.setValue(this.content);
     var line = this.console.lineCount();
     this.console.setCursor({line: line, ch: 0})
+  }
+  
+  this.clear = function() {
+    this.content = "";
+    this.console.setValue(this.content);
   }
 }
 
@@ -25,23 +31,26 @@ $(function() {
     matchBrackets: true
   });
 
-  var con = new Con("myconsole");
+  var con = new Con("console", "diff");
+  var envCon = new Con("environment", "javascript");
+
   con.log("This is where output goes.");
 
   var parser = Scheem.parser;
   var scheemParser = parser.buildParser();
   var evalScheem = Scheem.interpreter.evalScheem;
+  var env = {};
 
-  $('#submitbutton').click(function() {
+  $('#run').click(function() {
     var user_text = editor.getValue();
-//    $('#console').html(''); // clear console
-    con.log('\n' + 'Your input was: "' + user_text + '"');
+    con.log('\n' + user_text);
     try {
       var parsed = scheemParser(user_text);
-      con.log('Parsed: ' + JSON.stringify(parsed));
       try {
-        var result = evalScheem(parsed, {});
-        con.log('Result: ' + JSON.stringify(result));
+        var result = evalScheem(parsed, env);
+        con.log('-> ' + JSON.stringify(result));
+        envCon.clear();
+        envCon.log(JSON.stringify(env));
       }
       catch(e) {
         con.log('Eval Error: ' + e);
@@ -50,6 +59,14 @@ $(function() {
     catch(e) {
       con.log('Parse Error: ' + e);
     }
+  });
+
+  $('#clear-output').click(function() {
+    con.clear();
+  });
+  $('#clear-environment').click(function() {
+    env = {};
+    envCon.clear();
   });
 
 });
