@@ -88,7 +88,7 @@ Scheem.interpreter = (function() {
       xs = evl(expr[1], env);
       return xs[0];
     case 'cdr':
-      xs = evl(expr[1], env);
+      xs = evl(expr[1], env).slice();
       xs.splice(0, 1);
       return xs;
 
