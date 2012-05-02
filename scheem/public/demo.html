@@ -24,23 +24,27 @@
 </head>
 <body>
 
-
   <h1>Scheem Editor</h1>
-
-  <div id="edit-pane">
-    <input id="run" type="button" value="Run">
-    <input id="clear-output" type="button" value="Clear Output">
-    <input id="clear-environment" type="button" value="Clear Environment">
-    <div id="editor"></div>
+  <p>type stuff into the black box and press run (or press one of the example buttons)</p>
+  <div id="container">
+    <div id="edit-pane" class="pane">
+      <input id="run" type="button" value="Run">
+      <input id="clear-output" type="button" value="Clear Output">
+      <input id="clear-environment" type="button" value="Clear Environment">
+      <span class="example-presets">
+        <input id="ex-1" type="button" value="Example 1">
+        <input id="ex-2" type="button" value="Example 2">
+        <input id="ex-3" type="button" value="Example 3">
+      </span>
+      <div id="editor"></div>
+    </div>
+    <div id="results-pane" class="pane">
+      <h2>Output</h2>
+      <div id="console"></div>
+      <h2>Environment</h2>
+      <div id="environment"></div>
+    </div>
   </div>
-
-  <div id="results-pane">
-    <h2>Output</h2>
-    <div id="console"></div>
-    <h2>Environment</h2>
-    <div id="environment"></div>
-  </div>
-
 <script src="js/main.js"></script>
 
 </body>

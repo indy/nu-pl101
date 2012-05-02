@@ -1,13 +1,24 @@
+#container {
+  height: 80%;
+}
 
-
-#edit-pane {
+.pane {
   display: block;
   float: left;
   width:50%;
 }
 
-#results-pane {
-  display: block;
-  float: left;
-  width:50%;
+#edit-pane .CodeMirror-scroll {
+  height: 100%;
+}
+
+#console .CodeMirror-scroll {
+  height: 40%;
+}
+#environment .CodeMirror-scroll {
+  height: 40%;
+}
+
+.example-presets {
+  float: right;
 }
