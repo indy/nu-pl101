@@ -34,7 +34,10 @@ $(function() {
   var con = new Con("console", "diff");
   var envCon = new Con("environment", "javascript");
 
-//  con.log("This is where output goes.");
+  editor.setValue("; type Scheem code into this box and press run\n\
+; or press one of the three example buttons\n\n");
+  
+ 
 
   var parser = Scheem.parser;
   var scheemParser = parser.buildParser();
@@ -43,7 +46,7 @@ $(function() {
 
   $('#run').click(function() {
     var user_text = editor.getValue();
-    con.log('\n' + user_text.trim());
+//    con.log('\n' + user_text.trim());
     try {
       var parsed = scheemParser(user_text);
       try {
