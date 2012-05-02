@@ -30,6 +30,9 @@ Scheem.interpreter = (function() {
 
     // Strings are variable references
     if (typeof expr === 'string') {
+      if(env[expr] === undefined) {
+        throw "unknown variable " + expr;
+      }
       return env[expr];
     }
 

@@ -151,6 +151,8 @@ suite('variables: ', function() {
              res:2
            });
 
+  evalShouldThrow("when using an undefined variable", 
+                  ['q'], {});
 
 });
 
