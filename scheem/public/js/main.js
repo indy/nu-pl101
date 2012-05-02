@@ -85,7 +85,7 @@ $(function() {
 (define a 12)\n\
 (define b 34)\n\
 \n\
-(define c (+ a b))\n\
+(define c (+ a b a b a b))\n\
 \n\
 ; redefine variables\n\
 (set! a 20)\n\
