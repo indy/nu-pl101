@@ -57,6 +57,9 @@ suite('Numbers are numbers', function() {
   parse('single digits are numbers',
         "5", 5);
 
+  parse('negative numbers',
+        "-8", -8);
+
   parse('multiple digits are numbers',
         "25", 25);
 

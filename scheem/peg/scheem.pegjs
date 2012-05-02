@@ -17,13 +17,13 @@ blank =
 comment = 
     ";;" [^\n]* "\n" blank*
 
-validchar = 
-    [><a-zA-Z0-9_?!+\-=@#$%^&*/.]
+atom =
+    number
+  / word
+
+word =
+    w:[><a-zA-Z0-9_?!+\-=@#$%^&*/.]+ { return w.join(""); }
 
 number =
-    [0-9]
-
-atom =
-    n:number+ { return parseInt(n.join(""), 10); }
-  / w:validchar+ { return w.join(""); }
-
+    n:[0-9]+ { return parseInt(n.join(""), 10); }
+  / "-" n:number { return -n; }
