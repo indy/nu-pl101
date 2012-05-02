@@ -6,6 +6,14 @@
 
   <script src="js/jquery-1.7.1.min.js"></script>
 
+
+  <script src="codemirror/lib/codemirror.js"></script>
+  <script src="codemirror/mode/scheme/scheme.js"></script>
+  <script src="codemirror/mode/diff/diff.js"></script>
+  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="codemirror/theme/ambiance.css">
+  <link rel="stylesheet" href="codemirror/mode/diff/diff.css">
+
   <script src="js/precompiledPeg.js"></script>
 
   <script src="../lib/parser.js"></script>
@@ -14,14 +22,9 @@
 </head>
 <body>
 
-
-
-<textarea id="input" style="width:800px; height:300px;" edit_id="eta_0">(+ 1 2)</textarea>
-<input id="submitbutton" type="button" value="Run">
-
-<div id="console" class="console" style="border:solid 1px;">
-<p>This is where output goes.</p>
-</div>
+  <div id="editor"></div>
+  <input id="submitbutton" type="button" value="Run">
+  <div id="myconsole"></div>
 
 <script src="js/main.js"></script>
 

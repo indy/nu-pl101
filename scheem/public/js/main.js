@@ -1,33 +1,54 @@
-// Utility function to log messages
-var log_console = function(msg) {
-  $('#console').append('<p>' + msg + '</p>');
-};
+function Con(id) {
+  this.console = CodeMirror(document.getElementById("myconsole"), {
+    mode: "diff",
+    lineNumbers: true
+  });
+  this.content = "";
+
+  this.log = function(msg) {
+    this.content = this.content + "\n" + msg;
+    this.console.setValue(this.content);
+    var line = this.console.lineCount();
+    this.console.setCursor({line: line, ch: 0})
+  }
+}
 
 // After page load
 $(function() {
 
-  var parser = Scheem.parser;
+  var editor = CodeMirror(document.getElementById("editor"), {
+    value: "(* 2 3)",
+    mode: "scheme",
+    theme: "ambiance",
+    indentUnit: 2,
+    tabSize: 2,
+    matchBrackets: true
+  });
 
+  var con = new Con("myconsole");
+  con.log("This is where output goes.");
+
+  var parser = Scheem.parser;
   var scheemParser = parser.buildParser();
   var evalScheem = Scheem.interpreter.evalScheem;
 
   $('#submitbutton').click(function() {
-    var user_text = $('#input').val();
-    $('#console').html(''); // clear console
-    log_console('Your input was: "' + user_text + '"');
+    var user_text = editor.getValue();
+//    $('#console').html(''); // clear console
+    con.log('\n' + 'Your input was: "' + user_text + '"');
     try {
       var parsed = scheemParser(user_text);
-      log_console('Parsed: ' + JSON.stringify(parsed));
+      con.log('Parsed: ' + JSON.stringify(parsed));
       try {
         var result = evalScheem(parsed, {});
-        log_console('Result: ' + JSON.stringify(result));
+        con.log('Result: ' + JSON.stringify(result));
       }
       catch(e) {
-        log_console('Eval Error: ' + e);
+        con.log('Eval Error: ' + e);
       }
     }
     catch(e) {
-      log_console('Parse Error: ' + e);
+      con.log('Parse Error: ' + e);
     }
   });
 
