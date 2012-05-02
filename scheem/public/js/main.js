@@ -34,7 +34,7 @@ $(function() {
   var con = new Con("console", "diff");
   var envCon = new Con("environment", "javascript");
 
-  con.log("This is where output goes.");
+//  con.log("This is where output goes.");
 
   var parser = Scheem.parser;
   var scheemParser = parser.buildParser();
@@ -43,21 +43,21 @@ $(function() {
 
   $('#run').click(function() {
     var user_text = editor.getValue();
-    con.log('\n' + user_text);
+    con.log('\n' + user_text.trim());
     try {
       var parsed = scheemParser(user_text);
       try {
         var result = evalScheem(parsed, env);
-        con.log('-> ' + JSON.stringify(result));
+        con.log('> ' + JSON.stringify(result));
         envCon.clear();
         envCon.log(JSON.stringify(env));
       }
       catch(e) {
-        con.log('Eval Error: ' + e);
+        con.log('- Eval Error: ' + e);
       }
     }
     catch(e) {
-      con.log('Parse Error: ' + e);
+      con.log('- Parse Error: ' + e);
     }
   });
 

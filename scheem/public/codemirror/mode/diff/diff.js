@@ -3,9 +3,9 @@ CodeMirror.defineMode("diff", function() {
     token: function(stream) {
       var ch = stream.next();
       stream.skipToEnd();
+      if (ch == ">") return "result";
       if (ch == "+") return "plus";
       if (ch == "-") return "minus";
-      if (ch == "@") return "rangeinfo";
     }
   };
 });
