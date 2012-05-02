@@ -102,7 +102,13 @@ Scheem.interpreter = (function() {
   };
 
   return {
-    evalScheem: evl
+    evalScheem: function(expr, env) {
+      var res;
+      expr.map(function(e) {
+        res = evl(e, env);
+      });
+      return res;
+    }
   };
 
 })();

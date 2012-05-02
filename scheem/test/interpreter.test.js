@@ -38,12 +38,13 @@ function evalShouldThrow(desc, expression, env) {
   });
 }
 
+
 suite('arithmetic: ', function() {
 
   evalTest('5',
            {},
            {
-             ast:5,
+             ast:[5],
              env:{},
              res:5
            });
@@ -51,7 +52,7 @@ suite('arithmetic: ', function() {
   evalTest('(+ 2 3)',
            {},
            {
-             ast:['+', 2, 3],
+             ast:[['+', 2, 3]],
              env:{},
              res:5
            });
@@ -59,7 +60,7 @@ suite('arithmetic: ', function() {
   evalTest('(+ 2 3 4 5)',
            {},
            {
-             ast:['+', 2, 3, 4, 5],
+             ast:[['+', 2, 3, 4, 5]],
              env:{},
              res:14
            });
@@ -67,7 +68,7 @@ suite('arithmetic: ', function() {
   evalTest('(* 2 3)',
            {},
            {
-             ast:['*', 2, 3],
+             ast:[['*', 2, 3]],
              env:{},
              res:6
            });
@@ -75,7 +76,7 @@ suite('arithmetic: ', function() {
   evalTest('(* 2 3 4)',
            {},
            {
-             ast:['*', 2, 3, 4],
+             ast:[['*', 2, 3, 4]],
              env:{},
              res:24
            });
@@ -83,7 +84,7 @@ suite('arithmetic: ', function() {
   evalTest('(- 5 3)',
            {},
            {
-             ast:['-', 5, 3],
+             ast:[['-', 5, 3]],
              env:{},
              res:2
            });
@@ -91,7 +92,7 @@ suite('arithmetic: ', function() {
   evalTest('(/ 10 2)',
            {},
            {
-             ast:['/', 10, 2],
+             ast:[['/', 10, 2]],
              env:{},
              res:5
            });
@@ -99,7 +100,7 @@ suite('arithmetic: ', function() {
   evalTest('(* (/ 8 4) (+ 1 1))',
            {},
            {
-             ast:['*', ['/', 8, 4], ['+', 1, 1]],
+             ast:[['*', ['/', 8, 4], ['+', 1, 1]]],
              env:{},
              res:4
            });
@@ -113,7 +114,7 @@ suite('variables: ', function() {
   evalTest('5',
            {x:2, y:3, z:10},
            {
-             ast:5,
+             ast:[5],
              env:{x:2, y:3, z:10},
              res:5
            });
@@ -121,7 +122,7 @@ suite('variables: ', function() {
   evalTest('x',
            {x:2, y:3, z:10},
            {
-             ast:'x',
+             ast:['x'],
              env:{x:2, y:3, z:10},
              res:2
            });
@@ -129,7 +130,7 @@ suite('variables: ', function() {
   evalTest('(+ 2 3)',
            {x:2, y:3, z:10},
            {
-             ast:['+', 2, 3],
+             ast:[['+', 2, 3]],
              env:{x:2, y:3, z:10},
              res:5
            });
@@ -137,7 +138,7 @@ suite('variables: ', function() {
   evalTest('(* y 3)',
            {x:2, y:3, z:10},
            {
-             ast:['*', 'y', 3],
+             ast:[['*', 'y', 3]],
              env:{x:2, y:3, z:10},
              res:9
            });
@@ -145,10 +146,11 @@ suite('variables: ', function() {
   evalTest('(/ z (+ x y))',
            {x:2, y:3, z:10},
            {
-             ast:['/', 'z', ['+', 'x', 'y']],
+             ast:[['/', 'z', ['+', 'x', 'y']]],
              env:{x:2, y:3, z:10},
              res:2
            });
+
 
 });
 
@@ -157,7 +159,7 @@ suite('setting values:', function() {
   evalTest('(define a 5)',
            {x:2, y:3, z:10},
            {
-             ast:['define', 'a', 5],
+             ast:[['define', 'a', 5]],
              env:{x:2, y:3, z:10, a:5},
              res:0
            });
@@ -165,7 +167,7 @@ suite('setting values:', function() {
   evalTest('(set! z 1)',
            {x:2, y:3, z:10},
            {
-             ast:['set!', 'z', 1],
+             ast:[['set!', 'z', 1]],
              res:0,
              env:{x:2, y:3, z:1}
            });
@@ -173,13 +175,13 @@ suite('setting values:', function() {
   evalTest('(set! y (+ x 5))',
              {x:2, y:3, z:10},
              {
-               ast: ['set!', 'y', ['+', 'x', 5]], 
+               ast: [['set!', 'y', ['+', 'x', 5]]], 
                res: 0,
                env: {x:2, y:7, z:10}
              });
 
   evalShouldThrow("when set!'ing an undefined variable", 
-                  ['set!', 'y', 42], {});
+                  [['set!', 'y', 42]], {});
 
 });
 
@@ -188,7 +190,7 @@ suite('begin: ', function() {
   evalTest('(begin 1 2 3)',
            {},
            {
-             ast:['begin', 1, 2, 3],
+             ast:[['begin', 1, 2, 3]],
              env:{},
              res:3
            });
@@ -196,7 +198,7 @@ suite('begin: ', function() {
   evalTest('(begin (+ 2 2))',
            {},
            {
-             ast:['begin', ['+', 2, 2]],
+             ast:[['begin', ['+', 2, 2]]],
              env:{},
              res:4
            });
@@ -204,7 +206,7 @@ suite('begin: ', function() {
   evalTest('(begin x y x)',
            {x:1, y:2},
            {
-             ast:['begin', 'x', 'y', 'x'],
+             ast:[['begin', 'x', 'y', 'x']],
              env:{x:1, y:2},
              res:1
            });
@@ -212,10 +214,10 @@ suite('begin: ', function() {
   evalTest('(begin (set! x 5) (set! x (+ y x)) x)',
            {x:1, y:2},
            {
-             ast:['begin', 
+             ast:[['begin', 
                   ['set!', 'x', 5], 
                   ['set!', 'x', ['+', 'y', 'x']], 
-                  'x'],
+                  'x']],
              env:{x:7, y:2},
              res:7
            });
@@ -226,7 +228,7 @@ suite('quote: ', function() {
   evalTest('(quote 3)',
            {},
            {
-             ast:['quote', 3],
+             ast:[['quote', 3]],
              env:{}, 
              res:3
            });
@@ -234,7 +236,7 @@ suite('quote: ', function() {
   evalTest('(quote dog)',
            {},
            {
-             ast:['quote', 'dog'],
+             ast:[['quote', 'dog']],
              env:{}, 
              res:'dog'
            });
@@ -242,7 +244,7 @@ suite('quote: ', function() {
   evalTest('(quote (1 2 3))',
            {},
            {
-             ast:['quote', [1, 2, 3]],
+             ast:[['quote', [1, 2, 3]]],
              env:{},
              res:[1, 2, 3]
            });
@@ -250,7 +252,7 @@ suite('quote: ', function() {
   evalTest('(quote (+ 2 3))',
            {},
            {
-             ast:['quote', ['+', 2, 3]],
+             ast:[['quote', ['+', 2, 3]]],
              env:{},
              res:['+', 2, 3]
            });
@@ -258,7 +260,7 @@ suite('quote: ', function() {
   evalTest('(quote (quote (+ 2 3)))',
            {},
            {
-             ast:['quote', ['quote', ['+', 2, 3]]],
+             ast:[['quote', ['quote', ['+', 2, 3]]]],
              env:{},
              res:['quote', ['+', 2, 3]]
            });
@@ -266,7 +268,7 @@ suite('quote: ', function() {
   evalTest("'3",
            {},
            {
-             ast:['quote', 3], 
+             ast:[['quote', 3]], 
              env:{}, 
              res:3
            });
@@ -274,7 +276,7 @@ suite('quote: ', function() {
   evalTest("'dog",
            {},
            {
-             ast: ['quote', 'dog'],
+             ast: [['quote', 'dog']],
              env: {},
              res: 'dog'
            });
@@ -282,7 +284,7 @@ suite('quote: ', function() {
   evalTest("'(1 2 3)",
            {},
            {
-             ast: ['quote', [1, 2, 3]],
+             ast: [['quote', [1, 2, 3]]],
              env: {},
              res: [1, 2, 3]
            });
@@ -290,7 +292,7 @@ suite('quote: ', function() {
   evalTest('(quote (+ 2 3))',
            {},
            {
-             ast:['quote', ['+', 2, 3]],
+             ast:[['quote', ['+', 2, 3]]],
              env: {},
              res:['+', 2, 3]
            });
@@ -298,13 +300,13 @@ suite('quote: ', function() {
   evalTest('(quote (quote (+ 2 3)))',
            {},
            {
-             ast:['quote', ['quote', ['+', 2, 3]]],
+             ast:[['quote', ['quote', ['+', 2, 3]]]],
              env:{},
              res:['quote', ['+', 2, 3]]
            });
 
   evalShouldThrow("when more than 1 expression follows quote", 
-                  ['quote', 'y', 42], {});
+                  [['quote', 'y', 42]], {});
 
 });
 
@@ -314,7 +316,7 @@ suite('working with values:', function() {
   evalTest('(< 2 2)',
            {},
            {
-             ast:['<', 2, 2],
+             ast:[['<', 2, 2]],
              env:{}, 
              res:'#f'
            });
@@ -322,7 +324,7 @@ suite('working with values:', function() {
   evalTest('(< 2 3)',
            {},
            {
-             ast:['<', 2, 3],
+             ast:[['<', 2, 3]],
              env:{}, 
              res:'#t'
            });
@@ -330,7 +332,7 @@ suite('working with values:', function() {
   evalTest('(< (+ 1 1) (+ 2 3))',
            {},
            {
-             ast:['<', ['+', 1, 1], ['+', 2, 3]],
+             ast:[['<', ['+', 1, 1], ['+', 2, 3]]],
              env:{}, 
              res:'#t'
            });
@@ -343,7 +345,7 @@ suite('working with lists: ', function() {
   evalTest('(quote (2 3))',
            {},
            {
-             ast:['quote', [2, 3]],
+             ast:[['quote', [2, 3]]],
              env:{}, 
              res:[2, 3]
            });
@@ -351,7 +353,7 @@ suite('working with lists: ', function() {
   evalTest("(cons 1 '(2 3))",
            {},
            {
-             ast:['cons', 1, ['quote', [2, 3]]],
+             ast:[['cons', 1, ['quote', [2, 3]]]],
              env:{}, 
              res:[1, 2, 3]
            });
@@ -359,8 +361,8 @@ suite('working with lists: ', function() {
   evalTest("(cons '(1 2) '(3 4))",
            {},
            {
-             ast:['cons', 
-                  ['quote', [1, 2]], ['quote', [3, 4]]],
+             ast:[['cons', 
+                  ['quote', [1, 2]], ['quote', [3, 4]]]],
              env:{}, 
              res:[[1, 2], 3, 4]
            });
@@ -368,7 +370,7 @@ suite('working with lists: ', function() {
   evalTest("(car '((1 2) 3 4))",
            {},
            {
-             ast:['car', ['quote', [[1, 2], 3, 4]]],
+             ast:[['car', ['quote', [[1, 2], 3, 4]]]],
              env:{}, 
              res:[1, 2]
            });
@@ -376,7 +378,7 @@ suite('working with lists: ', function() {
   evalTest("(cdr '((1 2) 3 4))",
            {},
            {
-             ast:['cdr', ['quote', [[1, 2], 3, 4]]],
+             ast:[['cdr', ['quote', [[1, 2], 3, 4]]]],
              env:{}, 
              res:[3, 4]
            });
@@ -389,7 +391,7 @@ suite('conditionals: ', function() {
   evalTest('(if (= 1 1) 2 3)',
            {},
            {
-             ast:['if', ['=', 1, 1], 2, 3],
+             ast:[['if', ['=', 1, 1], 2, 3]],
              env:{},
              res:2
            });
@@ -397,7 +399,7 @@ suite('conditionals: ', function() {
   evalTest('(if (= 1 0) 2 3)',
            {},
            {
-             ast:['if', ['=', 1, 0], 2, 3],
+             ast:[['if', ['=', 1, 0], 2, 3]],
              env:{},
              res:3
            });
@@ -405,7 +407,7 @@ suite('conditionals: ', function() {
   evalTest('(if (= 1 1) 2 error)',
            {},
            {
-             ast:['if', ['=', 1, 1], 2, 'error'],
+             ast:[['if', ['=', 1, 1], 2, 'error']],
              env:{}, 
              res:2
            });
@@ -413,7 +415,7 @@ suite('conditionals: ', function() {
   evalTest('(if (= 1 0) error 3)',
            {},
            {
-             ast:['if', ['=', 1, 0], 'error', 3],
+             ast:[['if', ['=', 1, 0], 'error', 3]],
              env:{},
              res:3
            });
@@ -421,10 +423,9 @@ suite('conditionals: ', function() {
   evalTest('(if (= 1 1) (if (= 2 3) 10 11) 12)',
            {},
            {
-             ast:['if', ['=', 1, 1],
-                  ['if', ['=', 2, 3], 10, 11], 12],
+             ast:[['if', ['=', 1, 1],
+                  ['if', ['=', 2, 3], 10, 11], 12]],
              env:{},
              res:11
            });
 });
-

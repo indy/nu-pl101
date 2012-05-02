@@ -1,5 +1,5 @@
 start =
-    expr
+    expr+
 
 expr =
     ignore a:atom ignore { return a; }
@@ -15,7 +15,7 @@ blank =
   / "\t"
 
 comment = 
-    ";;" [^\n]* "\n" blank*
+    ";" [^\n]* "\n" blank*
 
 atom =
     number
