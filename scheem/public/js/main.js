@@ -1,7 +1,8 @@
 function Con(id, mode) {
   this.console = CodeMirror(document.getElementById(id), {
     mode: mode,
-    lineNumbers: true
+    lineNumbers: true,
+    readOnly: true
   });
 
   this.content = "";
@@ -53,7 +54,7 @@ $(function() {
         var result = evalScheem(parsed, env);
         con.log('> ' + JSON.stringify(result));
         envCon.clear();
-        envCon.log(JSON.stringify(env));
+        envCon.log(JSON.stringify(env, null, '\t'));
       }
       catch(e) {
         con.log('- Eval Error: ' + e);
