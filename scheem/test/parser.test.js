@@ -1,4 +1,6 @@
 
+var Scheem;
+
 if (typeof module !== 'undefined') {
   var chai = require('chai');
   var assert = chai.assert;
@@ -11,25 +13,25 @@ if (typeof module !== 'undefined') {
 
 var scheemParser = parser.buildParser();
 
-var parse = (function() {
-  return function(txt, form, expected) {
-    test(txt, function() {
+var parse = (function () {
+  return function (txt, form, expected) {
+    test(txt, function () {
       var res = scheemParser(form);
-      assert.deepEqual(res, expected );
+      assert.deepEqual(res, expected);
     });
-  }
+  };
 
-})();
+}());
 
 
-suite('Basic parsing', function(){
+suite('Basic parsing', function () {
 
   parse("Basic parsing test",
         "(a b c)", [["a", "b", "c"]]);
 
 });
 
-suite('Multiple expressions', function(){
+suite('Multiple expressions', function () {
 
   parse("test 1",
         "(a b c)(a b c)", [["a", "b", "c"], ["a", "b", "c"]]);
@@ -46,7 +48,7 @@ suite('Multiple expressions', function(){
 
 });
 
-suite('Whitespace', function(){
+suite('Whitespace', function () {
 
   parse("Allow any number of spaces between atoms",
         "(a   b   c)", [["a", "b", "c"]]);
@@ -57,20 +59,20 @@ suite('Whitespace', function(){
 });
 
 
-suite('Quotes', function() {
+suite('Quotes', function () {
   parse("expand quote syntax",
         "'(a b c)", [["quote", ["a", "b", "c"]]]);
   parse("expand quote syntax within a form",
         "(a b c '(d))", [["a", "b", "c", ["quote", ["d"]]]]);
 });
 
-suite('Comments', function() {
+suite('Comments', function () {
   parse("Lines that start with ;; should be ignored by the parser",
         "(a b ;; this is a comment \nc)", [["a", "b", "c"]]);
 });
 
 
-suite('Numbers are numbers', function() {
+suite('Numbers are numbers', function () {
   parse('single digits are numbers',
         "5", [5]);
 
