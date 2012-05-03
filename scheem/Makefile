@@ -1,4 +1,4 @@
-TESTS = test/*.js
+TESTS = js/test/*.js
 REPORTER = dot
 
 setup:
@@ -14,7 +14,7 @@ test:
 
 # compile the peg/scheem.pegjs file when we're using a browser
 peg:
-	./node_modules/pegjs/bin/pegjs -e ScheemPeg peg/scheem.pegjs public/js/precompiledPeg.js
+	./node_modules/pegjs/bin/pegjs -e ScheemPeg peg/scheem.pegjs js/generated/scheemPeg.js
 
 prepare:
 	npm install
