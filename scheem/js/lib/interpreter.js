@@ -44,9 +44,9 @@ Scheem.interpreter = (function () {
     },
     'begin': function(expr, env) {
       var res;
-      for (var i = 1;i < expr.length;i += 1) {
-        res = eval(expr[i], env);
-      }
+      expr.slice(1).forEach(function(e){
+        res = eval(e, env);
+      });
       return res;
     },
     'quote': function(expr, env) {
