@@ -12,27 +12,23 @@ if (typeof(Scheem) === 'undefined') {
 
 Scheem.interpreter = (function () {
 
-  var eachArgument = function (expr, env, fn) {
-    var i;
-    var res = eval(expr[1], env);
-    for (i = 2;i < expr.length;i++) {
-      res = fn(res, eval(expr[i], env));
-    }
-    return res;
+  var reduceArgs = function (expr, env, fn) {
+    return expr.slice(2).reduce(function(a, b) {return fn(a, eval(b, env));},
+                                eval(expr[1], env));
   };
 
   var dispatchOn = {
     '+': function(expr, env) {
-      return eachArgument(expr, env, function (a, b) { return a + b; });
+      return reduceArgs(expr, env, function (a, b) { return a + b; });
     },
     '-': function(expr, env) {
-      return eachArgument(expr, env, function (a, b) { return a - b; });
+      return reduceArgs(expr, env, function (a, b) { return a - b; });
     },
     '*': function(expr, env) {
-      return eachArgument(expr, env, function (a, b) { return a * b; });
+      return reduceArgs(expr, env, function (a, b) { return a * b; });
     },
     '/': function(expr, env) {
-      return eachArgument(expr, env, function (a, b) { return a / b; });
+      return reduceArgs(expr, env, function (a, b) { return a / b; });
     },
     'define': function(expr, env) {
       env[expr[1]] = eval(expr[2], env);
