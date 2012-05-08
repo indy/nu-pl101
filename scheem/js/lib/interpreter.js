@@ -12,7 +12,11 @@ if (typeof(Scheem) === 'undefined') {
 
 Scheem.interpreter = (function () {
 
-var add_binding = function (env, v, val) {
+var newScope = function(env) {
+  return {bindings: {}, outer: env};
+};
+
+var addBinding = function (env, v, val) {
     env.bindings[v] = val;
     return env;
 };
@@ -60,7 +64,7 @@ var update = function (env, v, val) {
       return reduceArgs(expr, env, function (a, b) { return a / b; });
     },
     'define': function(expr, env) {
-      env = add_binding(env, expr[1], eval(expr[2], env));
+      env = addBinding(env, expr[1], eval(expr[2], env));
       return 0;
     },
     'set!': function(expr, env) {
@@ -106,11 +110,25 @@ var update = function (env, v, val) {
       } else {
         return eval(expr[3], env);
       }
+    },
+    'let-one': function(expr, env) {
+      var newEnv = addBinding(newScope(env), 
+                              expr[1], eval(expr[2], env));
+      return eval(expr[3], newEnv);
     }
   };
 
 
+  var argsAsArray = function(expr, env) {
+    return expr.slice(1).reduce(function(a, b) { 
+                                  a.push(eval(b, env));
+                                  return a;},
+                                []);
+  };
+
   var eval = function(expr, env) {
+    var op, fn, args;
+
     // Numbers evaluate to themselves
     if (typeof expr === 'number') {
       return expr;
@@ -121,8 +139,15 @@ var update = function (env, v, val) {
       return lookup(env, expr);
     }
 
-    var op = expr[0];
-    return dispatchOn[op](expr, env);
+    op = expr[0];
+    if(dispatchOn[op] !== undefined) {
+      return dispatchOn[op](expr, env);
+    } else {
+      // function application
+      fn = eval(expr[0], env);
+      args = argsAsArray(expr, env);
+      return fn.apply(null, args);
+    }
   };
 
   return {
