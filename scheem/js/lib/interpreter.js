@@ -18,7 +18,7 @@ var add_binding = function (env, v, val) {
 };
 var lookup = function (env, v) {
     if(env === {}) {
-        return;
+        throw "unknown variable " + v;
     }
     if(env.bindings[v] !== undefined) {
         return env.bindings[v];
@@ -26,6 +26,9 @@ var lookup = function (env, v) {
     return lookup(env.outer, v);
 };
 var update = function (env, v, val) {
+    if(env === {}) {
+        throw "trying to set! an undefined variable: " + v;
+    }
     if(env.bindings[v] !== undefined) {
         env.bindings[v] = val;
         return env;
@@ -57,17 +60,11 @@ var update = function (env, v, val) {
       return reduceArgs(expr, env, function (a, b) { return a / b; });
     },
     'define': function(expr, env) {
-      env[expr[1]] = eval(expr[2], env);
+      env = add_binding(env, expr[1], eval(expr[2], env));
       return 0;
     },
     'set!': function(expr, env) {
-      var location = expr[1];
-      var value = expr[2];
-      if (env[location] === undefined) {
-        throw "trying to set! an undefined variable: " + expr[1];
-      } else {
-        env[location] = eval(value, env);
-      }
+      env = update(env, expr[1], eval(expr[2], env));
       return 0;
     },
     'begin': function(expr, env) {
@@ -121,10 +118,7 @@ var update = function (env, v, val) {
 
     // Strings are variable references
     if (typeof expr === 'string') {
-      if (env[expr] === undefined) {
-        throw "unknown variable " + expr;
-      }
-      return env[expr];
+      return lookup(env, expr);
     }
 
     var op = expr[0];
