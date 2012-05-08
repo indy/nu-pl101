@@ -12,6 +12,28 @@ if (typeof(Scheem) === 'undefined') {
 
 Scheem.interpreter = (function () {
 
+var add_binding = function (env, v, val) {
+    env.bindings[v] = val;
+    return env;
+};
+var lookup = function (env, v) {
+    if(env === {}) {
+        return;
+    }
+    if(env.bindings[v] !== undefined) {
+        return env.bindings[v];
+    }
+    return lookup(env.outer, v);
+};
+var update = function (env, v, val) {
+    if(env.bindings[v] !== undefined) {
+        env.bindings[v] = val;
+        return env;
+    }
+    return update(env.outer, v, val);
+};
+
+
   var reduceArgs = function(expr, env, fn) {
     return expr.slice(2).reduce(function(a, b) { return fn(a, eval(b, env)); },
                                 eval(expr[1], env));
