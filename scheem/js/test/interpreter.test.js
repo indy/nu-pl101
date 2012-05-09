@@ -16,6 +16,20 @@ if (typeof module !== 'undefined') {
 var evalScheem = interpreter.evalScheem;
 var scheemParser = parser.buildParser();  
 
+
+function removeMandatoryEnv(env) {
+  var e = env;
+  while(e.outer !== undefined) {
+    if(e.outer.mandatory !== undefined) {
+      e.outer = {};
+      return env;
+    }
+    e = e.outer;
+  }
+  return env;
+}
+
+
 function evalTest(str, bindings, expected) {
   test(str, function () {
 
@@ -30,9 +44,9 @@ function evalTest(str, bindings, expected) {
     chai.assert.deepEqual(res, expected.res);
     if (expected.bindings !== undefined) {
       var expectedEnv = {bindings: expected.bindings, outer: {}};
-      chai.assert.deepEqual(expectedEnv, env);
+      var e = removeMandatoryEnv(env);
+      chai.assert.deepEqual(expectedEnv, e);
     }
-
   });
 }
 

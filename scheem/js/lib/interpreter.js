@@ -40,29 +40,58 @@ Scheem.interpreter = (function () {
     return mutate(env.outer, v, val);
   };
 
+  var withMandatoryEnvironment = function (env) {
+    var bindings = {    
+      '+': function() {
+        var args = Array.prototype.slice.call(arguments);
+        return args.reduce(function(a, b) { return a + b; });
+      },
+      '-': function() {
+        var args = Array.prototype.slice.call(arguments);
+        return args.reduce(function(a, b) { return a - b; });
+      },
+      '*': function() {
+        var args = Array.prototype.slice.call(arguments);
+        return args.reduce(function(a, b) { return a * b; });
+      },
+      '/': function() {
+        var args = Array.prototype.slice.call(arguments);
+        return args.reduce(function(a, b) { return a / b; });
+      },
+      '=': function(a, b) {
+        return a === b ? '#t' : '#f';
+      },
+      '<': function(a, b) {
+        return a < b ? '#t' : '#f';
+      },
+      '>': function(a, b) {
+        return a > b ? '#t' : '#f';
+      },
+      'cons': function(x, xs) {
+        xs.unshift(x);
+        return xs;
+      },
+      'car': function(lst) {
+        return lst[0];
+      },
+      'cdr': function(lst) {
+        return lst.slice(1);
+      }
+    };
 
-  var reduceArgs = function(expr, env, fn) {
-    return expr.slice(2).reduce(function(a, b) { return fn(a, evl(b, env)); },
-                                evl(expr[1], env));
-  };
+    var mandatoryEnv = {bindings:bindings, outer:{}, mandatory: true};
 
-  var bool = function(expr, env, fn) {
-    return fn(evl(expr[1], env), evl(expr[2], env)) ? '#t' : '#f';
-  };
+    // go to the outermost environment and wrap the default bindings around it
+    var e = env;
+    while(Object.keys(e.outer).length > 0) {
+      e = e.outer;
+    }
+    e.outer = mandatoryEnv;
+
+    return env;
+  }
 
   var dispatchOn = {
-    '+': function(expr, env) {
-      return reduceArgs(expr, env, function (a, b) { return a + b; });
-    },
-    '-': function(expr, env) {
-      return reduceArgs(expr, env, function (a, b) { return a - b; });
-    },
-    '*': function(expr, env) {
-      return reduceArgs(expr, env, function (a, b) { return a * b; });
-    },
-    '/': function(expr, env) {
-      return reduceArgs(expr, env, function (a, b) { return a / b; });
-    },
     'define': function(expr, env) {
       env = addBinding(env, expr[1], evl(expr[2], env));
       return 0;
@@ -84,26 +113,6 @@ Scheem.interpreter = (function () {
       } 
       return expr[1];
     },
-    'cons': function(expr, env) {
-      var xs = evl(expr[2], env);
-      xs.unshift(evl(expr[1], env));
-      return xs;
-    },
-    'car': function(expr, env) {
-      return evl(expr[1], env)[0];
-    },
-    'cdr': function(expr, env) {
-      return evl(expr[1], env).slice(1);
-    },
-    '=': function(expr, env) {
-      return bool(expr, env, function(a, b) { return a == b; });
-    },
-    '<': function(expr, env) {
-      return bool(expr, env, function (a, b) { return a < b; });
-    },
-    '>': function(expr, env) {
-      return bool(expr, env, function (a, b) { return a > b; });
-    },
     'if': function(expr, env) {
       if (evl(expr[1], env) === '#t') {
         return evl(expr[2], env);
@@ -111,16 +120,11 @@ Scheem.interpreter = (function () {
         return evl(expr[3], env);
       }
     },
+    // todo: replace let-one with let
     'let-one': function(expr, env) {
       var newEnv = addBinding(newScope(env), 
                               expr[1], evl(expr[2], env));
       return evl(expr[3], newEnv);
-    },
-    'lambda-one': function(expr, env) {
-      return function(_arg) {
-        return evl(expr[2], addBinding(newScope(env),
-                                        expr[1], _arg));
-      };
     },
     'lambda': function(expr, env) {
       return function() {
@@ -172,7 +176,7 @@ Scheem.interpreter = (function () {
     evalScheem: function(expr, env) {
       var res;
       expr.forEach(function (e) {
-        res = evl(e, env);
+        res = evl(e, withMandatoryEnvironment(env));
       });
       return res;
     }
