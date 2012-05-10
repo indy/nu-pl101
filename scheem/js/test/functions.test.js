@@ -171,3 +171,18 @@ suite('lambda', function () {
 
 });
 
+
+
+suite('example programs', function () {
+  test('factorial function', function() {
+    var ast = scheemParser(["(define factorial (lambda (x) ",
+                            "  (if (= x 1) ",
+                            "      1 ",
+                            "      (* x (factorial (- x 1))))))",
+                            "(factorial 3)"].join(''));
+    var res = evalScheem(ast);
+    chai.assert.equal(res, 6);
+  });
+
+});
+

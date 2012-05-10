@@ -77,6 +77,9 @@ Scheem.interpreter = (function () {
       '>': function(a, b) {
         return a > b ? '#t' : '#f';
       },
+      'empty?': function(xs) {
+        return xs.length === 0 ? '#t' : '#f';
+      },
       'cons': function(x, xs) {
         xs.unshift(x);
         return xs;
@@ -101,10 +104,15 @@ Scheem.interpreter = (function () {
     // go to the outermost environment and wrap the default bindings around it
     var e = env;
     while(Object.keys(e.outer).length > 0) {
+      if(e.mandatory !== undefined) {
+        return env;
+      }
       e = e.outer;
     }
+    if(e.mandatory !== undefined) {
+      return env;
+    }
     e.outer = mandatoryEnv;
-
     return env;
   }
 
