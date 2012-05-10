@@ -39,8 +39,14 @@ Scheem.interpreter = (function () {
     }
     return mutate(env.outer, v, val);
   };
+  var addBindings = function (expr, env) {
+    expr.forEach(function(e) {
+      addBinding(env, e[0], evl(e[1], env));
+    });
+    return env;
+  };
 
-  var withMandatoryEnvironment = function (env) {
+  var withRequiredForms = function (env) {
     var bindings = {    
       '+': function() {
         var args = Array.prototype.slice.call(arguments);
@@ -91,7 +97,7 @@ Scheem.interpreter = (function () {
     return env;
   }
 
-  var dispatchOn = {
+  var specialForm = {
     'define': function(expr, env) {
       env = addBinding(env, expr[1], evl(expr[2], env));
       return 0;
@@ -120,11 +126,8 @@ Scheem.interpreter = (function () {
         return evl(expr[3], env);
       }
     },
-    // todo: replace let-one with let
-    'let-one': function(expr, env) {
-      var newEnv = addBinding(newScope(env), 
-                              expr[1], evl(expr[2], env));
-      return evl(expr[3], newEnv);
+    'let': function(expr, env) {
+      return evl(expr[2], addBindings(expr[1], newScope(env)));
     },
     'lambda': function(expr, env) {
       return function() {
@@ -162,8 +165,8 @@ Scheem.interpreter = (function () {
     }
 
     op = expr[0];
-    if(dispatchOn[op] !== undefined) {
-      return dispatchOn[op](expr, env);
+    if(specialForm[op] !== undefined) {
+      return specialForm[op](expr, env);
     } else {
       // function application
       fn = evl(expr[0], env);
@@ -176,7 +179,7 @@ Scheem.interpreter = (function () {
     evalScheem: function(expr, env) {
       var res;
       expr.forEach(function (e) {
-        res = evl(e, withMandatoryEnvironment(env));
+        res = evl(e, withRequiredForms(env));
       });
       return res;
     }

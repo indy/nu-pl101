@@ -74,26 +74,17 @@ suite('looking up variables in outer scope ', function () {
               });
 });
 
+suite('let scope ', function () {
 
-
-suite('let-one scope ', function () {
-
-  evalEnvTest('(let-one x 5 x)',
-              {bindings:{'x': 2}, outer:{}},
-              { ast: [['let-one', 'x', 5, 'x']],
-                env: {bindings:{'x': 2}, outer:{}},
-                res: 5
-              });
-
-  evalEnvTest('(define x 4) (let-one x 5 x)',
+  evalEnvTest('(define add4 (let ((x 4)) (lambda (y) (+ x y)))) (add4 6)',
               {bindings:{}, outer:{}},
-              { ast: [['define', 'x', 4],
-                      ['let-one', 'x', 5, 'x']],
-                env: {bindings:{'x': 4}, outer:{}},
-                res: 5
+              { ast: [['define', 'add4', ['let', [['x', 4]], ['lambda', ['y'], ['+', 'x', 'y']]]],
+                      ['add4', 6]],
+                res: 10
               });
 
 });
+
 
 
 suite('function application ', function () {
