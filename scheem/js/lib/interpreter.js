@@ -11,6 +11,7 @@ if (typeof(Scheem) === 'undefined') {
 }
 
 Scheem.interpreter = (function () {
+  "use strict";
 
   var newScope = function(env) {
     return {bindings: {}, outer: env};
@@ -20,6 +21,14 @@ Scheem.interpreter = (function () {
     env.bindings[v] = val;
     return env;
   };
+
+  var addBindings = function (expr, env) {
+    expr.forEach(function(e) {
+      addBinding(env, e[0], evl(e[1], env));
+    });
+    return env;
+  };
+
   var lookup = function (env, v) {
     if(env === {}) {
       throw "unknown variable " + v;
@@ -29,9 +38,10 @@ Scheem.interpreter = (function () {
     }
     return lookup(env.outer, v);
   };
+
   var mutate = function (env, v, val) {
     if(env === {}) {
-      throw "trying to set! an undefined variable: " + v;
+      throw "trying to alter an undefined variable: " + v;
     }
     if(env.bindings[v] !== undefined) {
       env.bindings[v] = val;
@@ -39,14 +49,8 @@ Scheem.interpreter = (function () {
     }
     return mutate(env.outer, v, val);
   };
-  var addBindings = function (expr, env) {
-    expr.forEach(function(e) {
-      addBinding(env, e[0], evl(e[1], env));
-    });
-    return env;
-  };
 
-  var withRequiredForms = function (env) {
+  var addRequiredForms = function (env) {
     var bindings = {    
       '+': function() {
         var args = Array.prototype.slice.call(arguments);
@@ -82,6 +86,13 @@ Scheem.interpreter = (function () {
       },
       'cdr': function(lst) {
         return lst.slice(1);
+      },
+      'alert': function(expr) {
+        if (typeof module !== 'undefined') {
+          console.log(expr);
+        } else {
+          alert(expr);
+        }
       }
     };
 
@@ -178,14 +189,17 @@ Scheem.interpreter = (function () {
   return {
     evalScheem: function(expr, env) {
       var res;
+      if(env === undefined) {
+        env = {bindings:{},outer:{}};
+      }
       expr.forEach(function (e) {
-        res = evl(e, withRequiredForms(env));
+        res = evl(e, addRequiredForms(env));
       });
       return res;
     }
   };
 
-}());
+}(this));
 
 // If we are used as Node module, export evalScheem
 if (typeof module !== 'undefined') {
