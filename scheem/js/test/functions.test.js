@@ -123,27 +123,24 @@ suite('function application ', function () {
 
 suite('lambda', function () {
   test('lambda function', function() {
-    var env = {bindings:{},outer:{}};
     var ast = scheemParser(['(define foo (lambda (x y) (+ x y)))',
                             '(foo 6 7)'].join(''));
-    var res = evalScheem(ast, env);
+    var res = evalScheem(ast);
     chai.assert.equal(res, 13);
   });
 
 
   test('calling an anonymous function', function() {
-    var env = {bindings:{},outer:{}};
     var ast = scheemParser('((lambda (x) (+ x 2)) 7)');
-    var res = evalScheem(ast, env);
+    var res = evalScheem(ast);
     chai.assert.equal(res, 9);
   });
 
   test('passing a function as a value to another function', function() {
-    var env = {bindings:{},outer:{}};
     var ast = scheemParser(['(define plus-two (lambda (x) (+ x 2)))',
                             '(define pass-in-six (lambda (f) (f 6)))',
                             '(pass-in-six plus-two)'].join(''));
-    var res = evalScheem(ast, env);
+    var res = evalScheem(ast);
     chai.assert.equal(res, 8);
   });
 
@@ -159,18 +156,16 @@ suite('lambda', function () {
   });
 
   test('inner function uses values from enclosing function', function() {
-    var env = {bindings:{},outer:{}};
     var ast = scheemParser(['(define foo (lambda (y) (lambda (z) (+ z y))))',
                             '((foo 6) 7)'].join(''));
-    var res = evalScheem(ast, env);
+    var res = evalScheem(ast);
     chai.assert.equal(res, 13);
   });
 
   test('recursive function', function() {
-    var env = {bindings:{},outer:{}};
     var ast = scheemParser(['(define power (lambda (x y) (if (= 1 y) x (power (+ x x) (- y 1)))))',
                             '(power 2 4)'].join(''));
-    var res = evalScheem(ast, env);
+    var res = evalScheem(ast);
     chai.assert.equal(res, 16);
   });
 
