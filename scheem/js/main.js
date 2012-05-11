@@ -43,7 +43,8 @@ $(function() {
   var parser = Scheem.parser;
   var scheemParser = parser.buildParser();
   var evalScheem = Scheem.interpreter.evalScheem;
-  var env = {};
+
+  var env = {bindings:{},outer:{}};
 
   $('#run').click(function() {
     var user_text = editor.getValue();
@@ -52,6 +53,7 @@ $(function() {
       var parsed = scheemParser(user_text);
       try {
         var result = evalScheem(parsed, env);
+
         con.log('> ' + JSON.stringify(result));
         envCon.clear();
         envCon.log(JSON.stringify(env, null, '\t'));
@@ -67,7 +69,7 @@ $(function() {
 
   function allClear() {
     con.clear();
-    env = {};
+    env = {bindings:{},outer:{}};
     envCon.clear();
   }
 
@@ -81,51 +83,72 @@ $(function() {
 
   $('#ex-1').click(function() {
     allClear();
-    editor.setValue("\n\
-; declare variables\n\
-(define a 12)\n\
-(define b 34)\n\
-\n\
-(define c (+ a b a b a b))\n\
-\n\
-; redefine variables\n\
-(set! a 20)\n\
-\n\
-(+ a c)\n\
-");
+    editor.setValue(
+      ["", 
+       "",
+       "; here's a simple factorial function declaration",
+       ";",
+       "(define factorial ",
+       "  (lambda (x)",
+       "    (if (= x 1)",
+       "      1",
+       "      (* x (factorial (- x 1))))))",
+       "",
+       "",
+       "; compute the factorial of 5",
+       ";",
+       "(factorial 5)",
+       ""].join("\n"));
   })
 
   $('#ex-2').click(function() {
     allClear();
-    editor.setValue("\n\
-; a list of two items\n\
-(define some-list '(foo bar))\n\
-\n\
-(define d 100)\n\
-(define e 120)\n\
-\n\
-; prepend the minimum of d and e onto some-list\n\
-(cons (if (< d e) \n\
-          'd \n\
-          'e) \n\
-      some-list)\n\
-\n\
-\n\
-");
-  })
+    editor.setValue(
+      ["",
+       "",
+       "; a Fibonacci implementation",
+       ";",
+       "(define fib (lambda (n)",
+       "              (if (< n 2) n",
+       "                  (+ (fib (- n 1)) (fib (- n 2))))))",
+       "",
+       "",
+       "; Fibonacci of 10",
+       ";",
+       "(fib 10)",
+       ""].join("\n"));
+  });
 
   $('#ex-3').click(function() {
     allClear();
-    editor.setValue("\n\
-; which item in the list is the largest\n\
-(define number-list '(4 3))\n\
-\n\
-(if (> (car number-list)\n\
-       (car (cdr number-list)))\n\
-    'first 'second)\n\
-\n\
-");
-  })
+    editor.setValue(
+["",
+"",
+"; a 'map' function",
+"; ",
+"; not the most efficient map implementation since calling it once results",
+"; in a backward list. Rather than write a 'reverse' function I'm calling ",
+"; map twice (using an identity function the second time around) to get ",
+"; the results in the right order.",
+"; ",
+"(define map ",
+"  (lambda (fn lst)",
+"    (let ((identity (lambda (x) x))",
+"          (mapres (lambda (fn2 lst2 res)",
+"                 (if (empty? lst2)",
+"                     res",
+"                   (mapres fn2 (cdr lst2) (cons (fn2 (car lst2)) res)))))) ",
+"      (mapres identity (mapres fn lst '()) '()))))",
+"",
+"; double the numbers in the list",
+";",
+"(map (lambda (x) (+ x x)) '(1 2 3 4 5 6 7 8 9))",
+"",
+"",
+""].join("\n"));
+  });
+
+
 
 
 
