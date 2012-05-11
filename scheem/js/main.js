@@ -98,11 +98,28 @@ $(function() {
        "; compute the factorial of 5",
        ";",
        "(factorial 5)",
-       "",
        ""].join("\n"));
   })
 
   $('#ex-2').click(function() {
+    allClear();
+    editor.setValue(
+      ["",
+       "",
+       "; a Fibonacci implementation",
+       ";",
+       "(define fib (lambda (n)",
+       "              (if (< n 2) n",
+       "                  (+ (fib (- n 1)) (fib (- n 2))))))",
+       "",
+       "",
+       "; Fibonacci of 10",
+       ";",
+       "(fib 10)",
+       ""].join("\n"));
+  });
+
+  $('#ex-3').click(function() {
     allClear();
     editor.setValue(
 ["",
@@ -129,19 +146,10 @@ $(function() {
 "",
 "",
 ""].join("\n"));
-  })
+  });
 
-  $('#ex-3').click(function() {
-    allClear();
-    editor.setValue("\n\
-; which item in the list is the largest\n\
-(define number-list '(4 3))\n\
-\n\
-(if (> (car number-list)\n\
-       (car (cdr number-list)))\n\
-    'first 'second)\n\
-\n\
-");
-  })
+
+
+
 
 });
