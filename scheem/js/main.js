@@ -104,27 +104,9 @@ $(function() {
   $('#ex-2').click(function() {
     allClear();
     editor.setValue(
-      ["",
-       "",
-       "; a Fibonacci implementation",
-       ";",
-       "(define fib (lambda (n)",
-       "              (if (< n 2) n",
-       "                  (+ (fib (- n 1)) (fib (- n 2))))))",
-       "",
-       "",
-       "; Fibonacci of 10",
-       ";",
-       "(fib 10)",
-       ""].join("\n"));
-  });
-
-  $('#ex-3').click(function() {
-    allClear();
-    editor.setValue(
 ["",
 "",
-"; a 'map' function",
+"; a terrible 'map' function",
 "; ",
 "; not the most efficient map implementation since calling it once results",
 "; in a backward list. Rather than write a 'reverse' function I'm calling ",
@@ -146,6 +128,37 @@ $(function() {
 "",
 "",
 ""].join("\n"));
+  });
+
+
+  $('#ex-3').click(function() {
+    allClear();
+    editor.setValue(
+      ["; here are some examples of the '.' special form which invokes ",
+       "; functions defined in the outer javascript environment",
+       "",
+       "; bring up the alert box",
+       ";",
+       "(. (alert) 'hi)",
+       "; equivalent to:  alert('hi');",
+       "",
+       "; log a messge to the console",
+       "; ",
+       "(. (console log) 'hello 'from 'the 'console)",
+       "; equivalent to: console.log('hello from the console');",
+       "",
+       "; invoke the evalScheem function, passing in a set of s-expressions",
+       "; for calculating the 10th Fibonacci number",
+       ";",
+       "(. (Scheem interpreter evalScheem)",
+       "   '((define fib (lambda (n)",
+       "                   (if (< n 2) n",
+       "                       (+ (fib (- n 1)) (fib (- n 2))))))",
+       "     (fib 10)))",
+       "",
+       "",
+       ""
+      ].join("\n"));
   });
 
 

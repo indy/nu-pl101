@@ -10,7 +10,7 @@ if (typeof(Scheem) === 'undefined') {
   Scheem = {};
 }
 
-Scheem.interpreter = (function () {
+Scheem.interpreter = (function (global) {
   "use strict";
 
   var newScope = function(env) {
@@ -117,6 +117,22 @@ Scheem.interpreter = (function () {
   }
 
   var specialForm = {
+    '.': function(expr, env) {
+      var obj = global;
+      var thisobj = global;
+
+      expr[1].forEach(function(e) {
+        thisobj = obj;
+        obj = obj[e];
+      });
+
+      var args = expr.slice(2).map(function(e) {
+        return evl(e, env);
+      });
+
+      return obj.apply(thisobj, args);
+
+    },
     'define': function(expr, env) {
       env = addBinding(env, expr[1], evl(expr[2], env));
       return 0;
