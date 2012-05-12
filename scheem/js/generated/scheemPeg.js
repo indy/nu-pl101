@@ -43,6 +43,7 @@ ScheemPeg = (function(){
         "blank": parse_blank,
         "comment": parse_comment,
         "atom": parse_atom,
+        "string": parse_string,
         "word": parse_word,
         "number": parse_number
       };
@@ -389,9 +390,83 @@ ScheemPeg = (function(){
       function parse_atom() {
         var result0;
         
-        result0 = parse_number();
+        result0 = parse_string();
         if (result0 === null) {
-          result0 = parse_word();
+          result0 = parse_number();
+          if (result0 === null) {
+            result0 = parse_word();
+          }
+        }
+        return result0;
+      }
+      
+      function parse_string() {
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        if (input.charCodeAt(pos) === 34) {
+          result0 = "\"";
+          pos++;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"\\\"\"");
+          }
+        }
+        if (result0 !== null) {
+          result1 = [];
+          if (/^[^"""]/.test(input.charAt(pos))) {
+            result2 = input.charAt(pos);
+            pos++;
+          } else {
+            result2 = null;
+            if (reportFailures === 0) {
+              matchFailed("[^\"\"\"]");
+            }
+          }
+          while (result2 !== null) {
+            result1.push(result2);
+            if (/^[^"""]/.test(input.charAt(pos))) {
+              result2 = input.charAt(pos);
+              pos++;
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("[^\"\"\"]");
+              }
+            }
+          }
+          if (result1 !== null) {
+            if (input.charCodeAt(pos) === 34) {
+              result2 = "\"";
+              pos++;
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"\\\"\"");
+              }
+            }
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, s) { return ["_string", s.join("")]; })(pos0, result0[1]);
+        }
+        if (result0 === null) {
+          pos = pos0;
         }
         return result0;
       }

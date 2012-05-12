@@ -144,7 +144,7 @@ $(function() {
        "",
        "; log a messge to the console",
        "; ",
-       "(. (console log) 'hello 'from 'the 'console)",
+       "(. (console log) \"hello from the console\")",
        "; equivalent to: console.log('hello from the console');",
        "",
        "; invoke the evalScheem function, passing in a set of s-expressions",

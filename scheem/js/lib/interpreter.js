@@ -161,6 +161,9 @@ Scheem.interpreter = (function (global) {
         return evl(expr[3], env);
       }
     },
+    '_string': function(expr, env) {
+      return expr[1];
+    },
     'let': function(expr, env) {
       return evl(expr[2], addBindings(expr[1], newScope(env)));
     },
@@ -216,8 +219,9 @@ Scheem.interpreter = (function (global) {
       if(env === undefined) {
         env = {bindings:{},outer:{}};
       }
+      env = addRequiredForms(env);
       expr.forEach(function (e) {
-        res = evl(e, addRequiredForms(env));
+        res = evl(e, env);
       });
       return res;
     }
