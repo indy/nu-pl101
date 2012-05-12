@@ -66,6 +66,16 @@ suite('Quotes', function () {
         "(a b c '(d))", [["a", "b", "c", ["quote", ["d"]]]]);
 });
 
+
+suite('strings', function () {
+  parse("parse a string",
+        "\"hello\"", [["_string", "hello"]]);
+
+  parse("parse a string",
+        "\"hello this is a string\"", [["_string", "hello this is a string"]]);
+});
+
+
 suite('Comments', function () {
   parse("Lines that start with ;; should be ignored by the parser",
         "(a b ;; this is a comment \nc)", [["a", "b", "c"]]);

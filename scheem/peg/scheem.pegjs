@@ -18,8 +18,13 @@ comment =
     ";" [^\n]* "\n" blank*
 
 atom =
-    number
+    string
+  / number
   / word
+
+
+string =
+    "\"" s:[^"\""]* "\"" { return ["_string", s.join("")]; }
 
 word =
     w:[><a-zA-Z0-9_?!+\-=@#$%^&*/.]+ { return w.join(""); }

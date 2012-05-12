@@ -370,6 +370,18 @@ suite('working with lists: ', function () {
 });
 
 
+suite('strings: ', function () {
+
+  evalTest('"hello"',
+           {},
+           { ast: [['_string', "hello"]],
+             bindings: {},
+             res: 'hello'
+           });
+
+});
+
+
 suite('conditionals: ', function () {
 
   evalTest('(if (= 1 1) 2 3)',
